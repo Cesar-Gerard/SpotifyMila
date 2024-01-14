@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_view"
+    app:startDestination="@id/myMusic">
+
+    <fragment
+        android:id="@+id/myMusic"
+        android:name="com.example.spotify.Albums.MyMusic"
+        android:label="fragment_my_music"
+        tools:layout="@layout/fragment_my_music" />
+    <action android:id="@+id/action_global_myMusic" app:destination="@id/myMusic" />
+    <fragment
+        android:id="@+id/download_Albums"
+        android:name="com.example.spotify.dialogs.Download_Albums"
+        android:label="fragment_download__albums"
+        tools:layout="@layout/fragment_download__albums" /><action android:id="@+id/action_global_download_Albums" app:destination="@id/download_Albums"/>
+    <fragment
+        android:id="@+id/album_Creation"
+        android:name="com.example.spotify.Albums.Album_Creation"
+        android:label="fragment_album__creation"
+        tools:layout="@layout/fragment_album__creation" /><action android:id="@+id/action_global_album_Creation" app:destination="@id/album_Creation"/>
+    <fragment
+        android:id="@+id/custom_Dialog_Image_Picker"
+        android:name="com.example.spotify.dialogs.Custom_Dialog_Image_Picker"
+        android:label="fragment_custom__dialog__image__picker"
+        tools:layout="@layout/fragment_custom__dialog__image__picker" /><action android:id="@+id/action_global_custom_Dialog_Image_Picker" app:destination="@id/custom_Dialog_Image_Picker"/>
+    <fragment
+        android:id="@+id/llista_cansons"
+        android:name="com.example.spotify.Songs.llista_cansons"
+        android:label="fragment_llista_cansons"
+        tools:layout="@layout/fragment_llista_cansons" /><action android:id="@+id/action_global_llista_cansons" app:destination="@id/llista_cansons"/>
+    <fragment
+        android:id="@+id/delete_album_custom_dialog"
+        android:name="com.example.spotify.dialogs.delete_album_custom_dialog"
+        android:label="fragment_delete_album_custom_dialog"
+        tools:layout="@layout/fragment_delete_album_custom_dialog" />
+    <action android:id="@+id/action_global_delete_album_custom_dialog" app:destination="@id/delete_album_custom_dialog" />
+    <fragment
+        android:id="@+id/song_Creation_CustomDialog"
+        android:name="com.example.spotify.dialogs.Song_Creation_CustomDialog"
+        android:label="fragment_song__creation__custom_dialog"
+        tools:layout="@layout/fragment_song_creation_custom_dialog" />
+    <action android:id="@+id/action_global_song_Creation_CustomDialog" app:destination="@id/song_Creation_CustomDialog" />
+</navigation>

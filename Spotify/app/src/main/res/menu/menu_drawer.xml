@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_MyMusic"
+            android:icon="@drawable/headphone"
+            android:title="My Music"/>
+
+        <item
+            android:id="@+id/nav_Download"
+            android:icon="@drawable/baseline_file_download_24"
+            android:title="Download Albums"/>
+
+
+    </group>
+
+
+    <item
+        android:id="@+id/nav_logout"
+        android:icon="@drawable/exit"
+        android:title="Exit"/>
+
+
+
+</menu>

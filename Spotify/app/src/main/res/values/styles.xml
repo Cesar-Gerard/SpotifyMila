@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="roundedFAB">
+        <item name="cornerFamily">rounded</item> <!-- Cambiar la familia de esquinas a "rounded" -->
+        <item name="cornerSize">50%</item> <!-- Ajustar el tamaño de las esquinas para que sea más redondo (puedes ajustar el valor según tus preferencias) -->
+    </style>
+
+
+    <style name="DatePickerSpinner" parent="@android:style/Theme.Holo.Light.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+    </style>
+
+</resources>
