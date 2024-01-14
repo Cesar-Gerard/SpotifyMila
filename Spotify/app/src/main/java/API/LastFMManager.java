@@ -1,6 +1,7 @@
 package API;
 
-import modelApi.SearchArtist;
+import modelApi.AlbumApi.SearchAlbum;
+import modelApi.ArtistApi.SearchArtist;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -38,6 +39,11 @@ public class LastFMManager {
     //Retorna la llista d'artistes que coincideixen amb el string pasat ordenats per ordre d'importancia
     public void getArtista(String artistname, Callback<SearchArtist> callback ){
         Call<SearchArtist> call = mApiService.searchArtists("artist.search",artistname,TOKEN,FORMAT);
+        call.enqueue(callback);
+    }
+
+    public void getAlbums (String album, Callback<SearchAlbum> callback){
+        Call<SearchAlbum> call = mApiService.searchAlbum("album.search",album, TOKEN, FORMAT);
         call.enqueue(callback);
     }
 

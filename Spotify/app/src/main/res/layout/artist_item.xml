@@ -6,14 +6,6 @@
 
 
 
-    <View
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/black"/>
-
-
-
     <ImageView
         android:id="@+id/ArtistImage"
         android:layout_width="100dp"

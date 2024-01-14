@@ -13,7 +13,7 @@
     <action android:id="@+id/action_global_myMusic" app:destination="@id/myMusic" />
     <fragment
         android:id="@+id/download_Albums"
-        android:name="com.example.spotify.dialogs.Download_Albums"
+        android:name="com.example.spotify.Download_Albums"
         android:label="fragment_download__albums"
         tools:layout="@layout/fragment_download__albums" /><action android:id="@+id/action_global_download_Albums" app:destination="@id/download_Albums"/>
     <fragment

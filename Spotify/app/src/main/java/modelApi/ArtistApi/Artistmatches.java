@@ -1,5 +1,5 @@
 
-package modelApi;
+package modelApi.ArtistApi;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -7,7 +7,9 @@ import java.util.Map;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import javax.annotation.processing.Generated;
 
+@Generated("jsonschema2pojo")
 public class Artistmatches {
 
     @SerializedName("artist")
@@ -32,8 +34,6 @@ public class Artistmatches {
     }
 
 
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
+
 
 }

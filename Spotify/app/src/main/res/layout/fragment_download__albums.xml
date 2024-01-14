@@ -3,27 +3,146 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/background_image"
-    tools:context=".dialogs.Download_Albums">
+    tools:context=".Download_Albums">
 
-    <ImageView
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:id="@+id/menu_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:elevation="4dp"
-        android:src="@drawable/menu"/>
-
-
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/RcyDownload"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_gravity="center"/>
+        android:layout_height="match_parent">
 
+
+        <!--Menu perque al possar fons es queda amagat i no es veu -->
+        <ImageView
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:id="@+id/menu_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="4dp"
+            android:src="@drawable/menu"/>
+
+
+        <!--//////////////////////////////////////////////-->
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+
+            <!--Barra de cerca y radiobuttons-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <!--Barra de cerca-->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/CardViewCerca"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="40dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="10dp">
+
+                        <ImageButton
+                            android:id="@+id/SearchButton"
+                            android:layout_width="wrap_content"
+                            android:background="@color/customTransparent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:src="@drawable/cerca_logo"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"></ImageButton>
+
+
+                        <EditText
+                            android:id="@+id/EditTextCerca"
+                            android:layout_width="230dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:hint="Search Artists or Albums"
+                            android:textSize="15dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/imageView3"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </androidx.cardview.widget.CardView>
+
+
+
+                <!--RadioButtons-->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="@+id/CardViewCerca"
+                    app:layout_constraintStart_toStartOf="@+id/CardViewCerca"
+                    app:layout_constraintTop_toBottomOf="@+id/CardViewCerca"
+                    android:layout_marginTop="10dp"
+                    app:cardCornerRadius="20dp">
+
+
+                    <RadioGroup
+                        android:id="@+id/radioGroup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:id="@+id/radioAlbums"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Álbumes" />
+
+                        <RadioButton
+                            android:id="@+id/radioArtists"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Artistas" />
+                    </RadioGroup>
+
+
+                </androidx.cardview.widget.CardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+            <!--RecycleView de les descarregues-->
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/RecycleDownload"
+                android:layout_margin="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
 
 
 
