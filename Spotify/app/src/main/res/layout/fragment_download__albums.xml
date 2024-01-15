@@ -7,6 +7,8 @@
     android:background="@drawable/background_image"
     tools:context=".Download_Albums">
 
+
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"

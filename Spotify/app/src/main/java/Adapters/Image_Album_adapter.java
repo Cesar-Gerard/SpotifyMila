@@ -42,29 +42,36 @@ public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapte
 
 
 
-        ImageLoader iL= ImageLoader.getInstance();
+        if(item.getImage().get(1).getImageBitmap()!=null){
+            holder.imagen.setImageBitmap(item.getImage().get(1).getImageBitmap());
+        }else {
 
-        iL.loadImage(item.getImage().get(1).toString(), new ImageLoadingListener() {
-            @Override
-            public void onLoadingStarted(String imageUri, View view) {
 
-            }
+            ImageLoader iL = ImageLoader.getInstance();
 
-            @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                holder.imagen.setImageResource(R.drawable.not_found);
-            }
+            iL.loadImage(item.getImage().get(3).getText(), new ImageLoadingListener() {
+                @Override
+                public void onLoadingStarted(String imageUri, View view) {
 
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                holder.imagen.setImageBitmap(loadedImage);
-            }
+                }
 
-            @Override
-            public void onLoadingCancelled(String imageUri, View view) {
+                @Override
+                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                    holder.imagen.setImageResource(R.drawable.not_found);
+                }
 
-            }
-        });
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    holder.imagen.setImageBitmap(loadedImage);
+                    item.getImage().get(1).setImageBitmap(loadedImage);
+                }
+
+                @Override
+                public void onLoadingCancelled(String imageUri, View view) {
+
+                }
+            });
+        }
 
 
     }

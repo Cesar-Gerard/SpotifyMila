@@ -1,6 +1,7 @@
 package Adapters;
 
 import android.content.Context;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.spotify.R;
 
+import Loading.LoadingDialog;
 import modelApi.AlbumApi.Album;
 
 import java.util.ArrayList;
@@ -25,11 +27,14 @@ public class Album_Download_Adapter extends RecyclerView.Adapter<Album_Download_
     Map<String, List<Album>> albums;
     Context context;
 
+    private LoadingDialog loadingDialog;
     Image_Album_adapter adapter;
+
 
     public Album_Download_Adapter(Map<String, List<Album>> entrada_albums, Context context) {
         albums = entrada_albums;
-        this.context= context;
+        this.context = context;
+        loadingDialog = new LoadingDialog(context);
     }
 
     @NonNull
@@ -54,11 +59,16 @@ public class Album_Download_Adapter extends RecyclerView.Adapter<Album_Download_
         String artist= artists.get(position);
 
         holder.recycle.setLayoutManager(new GridLayoutManager(context,2, LinearLayoutManager.HORIZONTAL, false));
-        adapter= new Image_Album_adapter(albums.get(artist));
-        holder.recycle.setAdapter(adapter);
+
+
+        if(albums.get(artist)!=null && albums.get(artist).size()>0) {
+            adapter = new Image_Album_adapter(albums.get(artist));
+            holder.recycle.setAdapter(adapter);
+        }
 
 
         holder.name.setText(artist);
+        hideLoading();
 
     }
 
@@ -84,4 +94,31 @@ public class Album_Download_Adapter extends RecyclerView.Adapter<Album_Download_
             recycle= itemView.findViewById(R.id.RecycleAlbums);
         }
     }
+
+
+
+    private void showLoading() {
+        loadingDialog.show();
+    }
+
+    // Método para ocultar la pantalla de carga
+    public void hideLoading() {
+        loadingDialog.dismiss();
+    }
+
+    // Método para iniciar la carga y manejar la pantalla de carga
+    public void startLoading() {
+        showLoading();
+
+        // Simula la carga de datos con un retraso
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                notifyDataSetChanged();
+                hideLoading();
+            }
+        }, 3000); // Ajusta este valor al tiempo real que tome cargar los datos
+    }
+
+
 }

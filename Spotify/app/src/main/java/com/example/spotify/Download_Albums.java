@@ -10,9 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.spotify.databinding.FragmentDownloadAlbumsBinding;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,8 +57,7 @@ public class Download_Albums extends Fragment {
         binding.RecycleDownload.setLayoutManager(new LinearLayoutManager(this.getContext(),LinearLayoutManager.VERTICAL, false));
 
 
-        //ImageLoader
-        setupUniversalImageLoader();
+
 
         setUpSearch();
 
@@ -98,6 +94,7 @@ public class Download_Albums extends Fragment {
 
 
     private void ArtistSearch() {
+        showLoadingBeforeSearchArtist();
         manager.getArtista(binding.EditTextCerca.getText().toString(), new Callback<SearchArtist>() {
             @Override
             public void onResponse(Call<SearchArtist> call, Response<SearchArtist> response) {
@@ -105,18 +102,21 @@ public class Download_Albums extends Fragment {
                 List<Artist> result = response.body().getResults().getArtistmatches().getArtist();
                 recycleArtists(result);
 
+                hideLoadingArtist();
 
             }
 
             @Override
             public void onFailure(Call<SearchArtist> call, Throwable t) {
-
+                hideLoadingArtist();
             }
         });
     }
 
 
     private void AlbumSearch() {
+
+        showLoadingBeforeSearchAlbum();
         manager.getAlbums(binding.EditTextCerca.getText().toString(), new Callback<SearchAlbum>() {
             @Override
             public void onResponse(Call<SearchAlbum> call, Response<SearchAlbum> response) {
@@ -136,7 +136,7 @@ public class Download_Albums extends Fragment {
 
             @Override
             public void onFailure(Call<SearchAlbum> call, Throwable t) {
-
+                hideLoadingAlbum();
             }
         });
     }
@@ -186,16 +186,54 @@ public class Download_Albums extends Fragment {
     //endregion
 
 
-    private void setupUniversalImageLoader() {
-        DisplayImageOptions options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.not_found)
-                .build();
+    private void handleLoadingAlbum() {
 
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this.getContext())
-                .defaultDisplayImageOptions(options)
-                .build();
+        if (album_adapter != null) {
+            album_adapter.startLoading();
+        }
+    }
 
-        ImageLoader.getInstance().init(config);
+
+    private void showLoadingBeforeSearchAlbum() {
+        album_adapter = new Album_Download_Adapter(new HashMap<>(), getContext());
+        binding.RecycleDownload.setAdapter(album_adapter);
+        handleLoadingAlbum();
+    }
+
+    // Método para ocultar la pantalla de carga
+    private void hideLoadingAlbum() {
+        if (album_adapter != null) {
+            album_adapter.hideLoading();
+        }
+    }
+
+
+
+
+
+
+
+
+    private void handleLoadingArtist() {
+
+        if (artist_adapter != null) {
+            artist_adapter.startLoading();
+        }
+
+    }
+
+
+    private void showLoadingBeforeSearchArtist() {
+        artist_adapter = new Artist_Adapter(new ArrayList<>(), getContext());
+        binding.RecycleDownload.setAdapter(artist_adapter);
+        handleLoadingArtist();
+    }
+
+    // Método para ocultar la pantalla de carga
+    private void hideLoadingArtist() {
+        if (album_adapter != null) {
+            album_adapter.hideLoading();
+        }
     }
 
 
