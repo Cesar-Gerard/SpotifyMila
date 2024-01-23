@@ -2,6 +2,7 @@ package Adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,9 +12,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.spotify.Download_Albums;
+import com.example.spotify.InsideArtist;
 import com.example.spotify.R;
+import com.example.spotify.databinding.FragmentInsideArtistBinding;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -28,16 +33,16 @@ public class Artist_Adapter extends RecyclerView.Adapter<Artist_Adapter.ViewHold
 
 
     List<Artist> artistes;
-    Context context;
+    Download_Albums context;
 
     private LoadingArtist loadingDialog;
 
 
     //region Constructor
-    public Artist_Adapter(List<Artist> entrada_artistes, Context context) {
+    public Artist_Adapter(List<Artist> entrada_artistes, Download_Albums context) {
         artistes = entrada_artistes;
         this.context = context;
-        loadingDialog = new LoadingArtist(context);
+        loadingDialog = new LoadingArtist(context.getContext());
     }
 
     //endregion
@@ -93,6 +98,34 @@ public class Artist_Adapter extends RecyclerView.Adapter<Artist_Adapter.ViewHold
                 }
             });
         }
+
+
+        //Anem a mostrar els albums del artista
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                InsideArtist fragmentoDestino = new InsideArtist();
+
+                // Crear un Bundle para pasar el objeto Album
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("album", item.getName());
+
+                // Asignar el Bundle al fragmento de destino
+                fragmentoDestino.setArguments(bundle);
+
+                // Realizar la transacción de fragmentos
+                FragmentTransaction transaction = context.requireActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.nav_host_fragment, fragmentoDestino);
+                transaction.addToBackStack(null);
+                transaction.commit();
+
+            }
+        });
+
+
+
 
     }
 

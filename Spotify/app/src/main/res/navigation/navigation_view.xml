@@ -43,4 +43,9 @@
         android:label="fragment_song__creation__custom_dialog"
         tools:layout="@layout/fragment_song_creation_custom_dialog" />
     <action android:id="@+id/action_global_song_Creation_CustomDialog" app:destination="@id/song_Creation_CustomDialog" />
+    <fragment
+        android:id="@+id/insideArtist"
+        android:name="com.example.spotify.InsideArtist"
+        android:label="fragment_inside_artist"
+        tools:layout="@layout/fragment_inside_artist" /><action android:id="@+id/action_global_insideArtist" app:destination="@id/insideArtist"/>
 </navigation>

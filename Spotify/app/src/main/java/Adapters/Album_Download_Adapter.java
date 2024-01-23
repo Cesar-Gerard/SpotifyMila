@@ -60,14 +60,15 @@ public class Album_Download_Adapter extends RecyclerView.Adapter<Album_Download_
 
         holder.recycle.setLayoutManager(new GridLayoutManager(context,2, LinearLayoutManager.HORIZONTAL, false));
 
+        holder.name.setText(artist);
 
         if(albums.get(artist)!=null && albums.get(artist).size()>0) {
-            adapter = new Image_Album_adapter(albums.get(artist));
+            adapter = new Image_Album_adapter(albums.get(artist), context);
             holder.recycle.setAdapter(adapter);
         }
 
 
-        holder.name.setText(artist);
+
         hideLoading();
 
     }

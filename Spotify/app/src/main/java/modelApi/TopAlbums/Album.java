@@ -1,7 +1,6 @@
 
-package modelApi.AlbumApi;
+package modelApi.TopAlbums;
 
-import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -9,23 +8,20 @@ import com.google.gson.annotations.SerializedName;
 import javax.annotation.processing.Generated;
 
 @Generated("jsonschema2pojo")
-public class Album implements Serializable {
+public class Album {
 
     @SerializedName("name")
     @Expose
     private String name;
+    @SerializedName("playcount")
+    @Expose
+    private Integer playcount;
     @SerializedName("artist")
     @Expose
-    private String artist;
-    @SerializedName("url")
-    @Expose
-    private String url;
+    private Artist artist;
     @SerializedName("image")
     @Expose
     private List<Image> image;
-    @SerializedName("mbid")
-    @Expose
-    private String mbid;
 
     public String getName() {
         return name;
@@ -35,20 +31,20 @@ public class Album implements Serializable {
         this.name = name;
     }
 
-    public String getArtist() {
+    public Integer getPlaycount() {
+        return playcount;
+    }
+
+    public void setPlaycount(Integer playcount) {
+        this.playcount = playcount;
+    }
+
+    public Artist getArtist() {
         return artist;
     }
 
-    public void setArtist(String artist) {
+    public void setArtist(Artist artist) {
         this.artist = artist;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public List<Image> getImage() {
@@ -57,15 +53,6 @@ public class Album implements Serializable {
 
     public void setImage(List<Image> image) {
         this.image = image;
-    }
-
-
-    public String getMbid() {
-        return mbid;
-    }
-
-    public void setMbid(String mbid) {
-        this.mbid = mbid;
     }
 
 }

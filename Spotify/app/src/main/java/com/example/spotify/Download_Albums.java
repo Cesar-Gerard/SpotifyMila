@@ -178,7 +178,7 @@ public class Download_Albums extends Fragment {
     private void recycleArtists(List<Artist> artistes) {
 
 
-        artist_adapter = new Artist_Adapter(artistes, this.getContext());
+        artist_adapter = new Artist_Adapter(artistes, this);
         binding.RecycleDownload.setAdapter(artist_adapter);
 
 
@@ -224,7 +224,7 @@ public class Download_Albums extends Fragment {
 
 
     private void showLoadingBeforeSearchArtist() {
-        artist_adapter = new Artist_Adapter(new ArrayList<>(), getContext());
+        artist_adapter = new Artist_Adapter(new ArrayList<>(), this);
         binding.RecycleDownload.setAdapter(artist_adapter);
         handleLoadingArtist();
     }

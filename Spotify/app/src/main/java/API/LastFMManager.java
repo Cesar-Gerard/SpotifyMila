@@ -2,6 +2,7 @@ package API;
 
 import modelApi.AlbumApi.SearchAlbum;
 import modelApi.ArtistApi.SearchArtist;
+import modelApi.TopAlbums.SearchTopAlbums;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -44,6 +45,11 @@ public class LastFMManager {
 
     public void getAlbums (String album, Callback<SearchAlbum> callback){
         Call<SearchAlbum> call = mApiService.searchAlbum("album.search",album, TOKEN, FORMAT);
+        call.enqueue(callback);
+    }
+
+    public void getTopAlbums (String artista, Callback<SearchTopAlbums> callback){
+        Call<SearchTopAlbums> call = mApiService.searchTopAlbums("artist.gettopalbums",artista, TOKEN, FORMAT);
         call.enqueue(callback);
     }
 
