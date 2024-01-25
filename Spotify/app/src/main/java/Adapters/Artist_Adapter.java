@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.spotify.Download_Albums;
 import com.example.spotify.InsideArtist;
 import com.example.spotify.R;
-import com.example.spotify.databinding.FragmentInsideArtistBinding;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -63,41 +62,9 @@ public class Artist_Adapter extends RecyclerView.Adapter<Artist_Adapter.ViewHold
 
 
         holder.name.setText(item.getName());
+        holder.listeners.setText(item.getListeners());
 
 
-        if(item.getImage().get(1).getImageBitmap()!=null){
-            holder.image.setImageBitmap(item.getImage().get(2).getImageBitmap());
-        }else {
-
-
-            holder.image.setImageResource(R.drawable.loading);
-            ImageLoader iL = ImageLoader.getInstance();
-
-            iL.loadImage(item.getImage().get(2).getText(), new ImageLoadingListener() {
-                @Override
-                public void onLoadingStarted(String imageUri, View view) {
-
-                }
-
-                @Override
-                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                    holder.image.setImageResource(R.drawable.not_found);
-                    hideLoading();
-                }
-
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    holder.image.setImageBitmap(loadedImage);
-                    item.getImage().get(1).setImageBitmap(loadedImage);
-                    hideLoading();
-                }
-
-                @Override
-                public void onLoadingCancelled(String imageUri, View view) {
-
-                }
-            });
-        }
 
 
         //Anem a mostrar els albums del artista
@@ -144,14 +111,14 @@ public class Artist_Adapter extends RecyclerView.Adapter<Artist_Adapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView name;
-        ImageView image;
+        TextView listeners;
 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             name = itemView.findViewById(R.id.ArtistName);
-            image= itemView.findViewById(R.id.ArtistImage);
+            listeners = itemView.findViewById(R.id.txvListeners);
         }
     }
 
@@ -175,7 +142,7 @@ public class Artist_Adapter extends RecyclerView.Adapter<Artist_Adapter.ViewHold
                 notifyDataSetChanged();
                 hideLoading();
             }
-        }, 3000); // Ajusta este valor al tiempo real que tome cargar los datos
+        }, 3000);
     }
 
 }

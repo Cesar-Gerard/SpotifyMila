@@ -46,6 +46,6 @@
     <fragment
         android:id="@+id/insideArtist"
         android:name="com.example.spotify.InsideArtist"
-        android:label="fragment_inside_artist"
-        tools:layout="@layout/fragment_inside_artist" /><action android:id="@+id/action_global_insideArtist" app:destination="@id/insideArtist"/>
+        android:label="artist_content"
+        tools:layout="@layout/artist_content" /><action android:id="@+id/action_global_insideArtist" app:destination="@id/insideArtist"/>
 </navigation>

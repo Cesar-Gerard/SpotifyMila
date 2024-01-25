@@ -27,9 +27,6 @@ public class Artist {
     @SerializedName("streamable")
     @Expose
     private String streamable;
-    @SerializedName("image")
-    @Expose
-    private List<Image> image;
 
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
@@ -81,16 +78,6 @@ public class Artist {
 
     public void setStreamable(String streamable) {
         this.streamable = streamable;
-    }
-
-
-    public List<Image> getImage() {
-        return image;
-    }
-
-
-    public void setImage(List<Image> image) {
-        this.image = image;
     }
 
 

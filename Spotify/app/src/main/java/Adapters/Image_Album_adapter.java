@@ -88,7 +88,19 @@ public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapte
 
                     @Override
                     public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                        holder.imagen.setImageResource(R.drawable.not_found);
+                        int resourceId = R.drawable.music_not_found;
+
+                        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId);
+
+                        float scale = context.getResources().getDisplayMetrics().density;
+
+                        int widthInPx = (int) (120 * scale);
+                        int heightInPx = (int) (120 * scale);
+
+                        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, widthInPx, heightInPx, true);
+                        item.getImage().get(1).setImageBitmap(scaledBitmap);
+
+                        holder.imagen.setImageBitmap(scaledBitmap);
                     }
 
                     @Override

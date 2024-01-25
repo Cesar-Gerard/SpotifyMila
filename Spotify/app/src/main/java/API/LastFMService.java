@@ -2,6 +2,7 @@ package API;
 
 import modelApi.AlbumApi.SearchAlbum;
 import modelApi.ArtistApi.SearchArtist;
+import modelApi.InfoApi.InfoArtist;
 import modelApi.TopAlbums.SearchTopAlbums;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -29,6 +30,15 @@ public interface LastFMService {
 
     @GET("/2.0/")
     Call<SearchTopAlbums> searchTopAlbums(
+            @Query("method") String method,
+            @Query("artist") String artist,
+            @Query("api_key") String apiKey,
+            @Query("format") String format
+    );
+
+
+    @GET("/2.0/")
+    Call<InfoArtist> getInfoArtist(
             @Query("method") String method,
             @Query("artist") String artist,
             @Query("api_key") String apiKey,
