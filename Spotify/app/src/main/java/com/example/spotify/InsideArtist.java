@@ -3,6 +3,8 @@ package com.example.spotify;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import com.example.spotify.databinding.ArtistContentBinding;
 
 import API.LastFMManager;
+import Adapters.Image_Album_adapter;
 import modelApi.InfoApi.InfoArtist;
 import modelApi.TopAlbums.SearchTopAlbums;
 import modelApi.TopAlbums.Topalbums;
@@ -25,6 +28,8 @@ public class InsideArtist extends Fragment {
 
     ArtistContentBinding binding;
     Topalbums resultat;
+
+    Image_Album_adapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,6 +48,9 @@ public class InsideArtist extends Fragment {
 
 
             binding.TitleName.setText(parametro);
+
+
+
         }
 
 
@@ -54,11 +62,21 @@ public class InsideArtist extends Fragment {
         return v;
     }
 
+
+
+    //Obtenim la informació del Artista
     private void getArtistInfo(String parametro) {
         LastFMManager.getInstance().getInfoArtist(parametro, new Callback<InfoArtist>() {
             @Override
             public void onResponse(Call<InfoArtist> call, Response<InfoArtist> response) {
+
+                if(response.body().getArtist().getBio().getContent().toString().equals("") || response.body().getArtist().getBio().getContent().toString().equals(null)){
+                    binding.InfoArtist.setText("No Description Avaliable");
+                }else{
                     binding.InfoArtist.setText(response.body().getArtist().getBio().getContent().toString());
+                }
+
+
             }
 
             @Override
@@ -68,6 +86,7 @@ public class InsideArtist extends Fragment {
         });
     }
 
+    //Obtenim els albums ordenats per rellevança
     private void getTopAlbums(String parametro) {
         LastFMManager.getInstance().getTopAlbums(parametro, new Callback<SearchTopAlbums>() {
             @Override
@@ -75,12 +94,18 @@ public class InsideArtist extends Fragment {
 
                 resultat = response.body().getTopalbums();
 
+                adapter = new Image_Album_adapter(resultat.getAlbum(),InsideArtist.this.getContext(),true);
+                binding.LlistaAlbums.setLayoutManager(new GridLayoutManager(InsideArtist.this.getContext(),2, LinearLayoutManager.VERTICAL, false));
+                binding.LlistaAlbums.setAdapter(adapter);
+
             }
 
             @Override
             public void onFailure(Call<SearchTopAlbums> call, Throwable t) {
-                Log.e("XXX", t.getLocalizedMessage());
+                Log.e("Error getTopAlbumsArtist()", t.getLocalizedMessage());
             }
         });
     }
+
+
 }

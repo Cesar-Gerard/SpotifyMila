@@ -19,16 +19,24 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.util.List;
 
+import Interface.AlbumInterface;
 import modelApi.AlbumApi.Album;
 
 public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapter.ViewHolder>{
 
     List<Album> albums;
+    List<modelApi.TopAlbums.Album> top;
     Context context;
 
     public Image_Album_adapter(List<Album> albums,Context context) {
         this.albums=albums;
         this.context=context;
+    }
+
+    public Image_Album_adapter(List<modelApi.TopAlbums.Album> album, Context context,boolean isTop) {
+        top=album;
+        this.context=context;
+
     }
 
     @NonNull
@@ -43,21 +51,37 @@ public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapte
     @Override
     public void onBindViewHolder(@NonNull Image_Album_adapter.ViewHolder holder, int position) {
 
-        Album item = albums.get(position);
+        if(albums!=null) {
 
 
+            Album item = albums.get(position);
 
-        if(item.getImage().get(1).getImageBitmap()!=null){
 
-            if(holder.getAdapterPosition()== position){
+            CarregarImatge(holder, position, item, 120);
+        }else if(top != null){
+
+            modelApi.TopAlbums.Album itemTop = top.get(position);
+
+            CarregarImatge(holder, position, itemTop, 150);
+
+
+        }
+
+
+    }
+
+    private void CarregarImatge(@NonNull ViewHolder holder, int position, AlbumInterface item, int escala) {
+        if (item.getImage().get(1).getImageBitmap() != null) {
+
+            if (holder.getAdapterPosition() == position) {
                 holder.imagen.setImageBitmap(item.getImage().get(1).getImageBitmap());
             }
 
 
-        }else {
+        } else {
 
 
-            if(item.getImage().get(3).getText().equals("")){
+            if (item.getImage().get(3).getText().equals("")) {
 
 
                 int resourceId = R.drawable.music_not_found;
@@ -66,8 +90,8 @@ public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapte
 
                 float scale = context.getResources().getDisplayMetrics().density;
 
-                int widthInPx = (int) (120 * scale);
-                int heightInPx = (int) (120 * scale);
+                int widthInPx = (int) (escala * scale);
+                int heightInPx = (int) (escala * scale);
 
                 Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, widthInPx, heightInPx, true);
                 item.getImage().get(1).setImageBitmap(scaledBitmap);
@@ -75,7 +99,7 @@ public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapte
                 holder.imagen.setImageBitmap(scaledBitmap);
 
 
-            }else {
+            } else {
 
 
                 ImageLoader iL = ImageLoader.getInstance();
@@ -94,8 +118,8 @@ public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapte
 
                         float scale = context.getResources().getDisplayMetrics().density;
 
-                        int widthInPx = (int) (120 * scale);
-                        int heightInPx = (int) (120 * scale);
+                        int widthInPx = (int) (escala * scale);
+                        int heightInPx = (int) (escala * scale);
 
                         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, widthInPx, heightInPx, true);
                         item.getImage().get(1).setImageBitmap(scaledBitmap);
@@ -106,10 +130,18 @@ public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapte
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 
-                        holder.imagen.setImageBitmap(loadedImage);
+                        float scale = context.getResources().getDisplayMetrics().density;
+
+                        int widthInPx = (int) (escala * scale);
+                        int heightInPx = (int) (escala * scale);
+
+                        Bitmap scaledBitmap = Bitmap.createScaledBitmap(loadedImage, widthInPx, heightInPx, true);
+                        item.getImage().get(1).setImageBitmap(scaledBitmap);
+
+                        holder.imagen.setImageBitmap(scaledBitmap);
 
 
-                        item.getImage().get(1).setImageBitmap(loadedImage);
+                        item.getImage().get(1).setImageBitmap(scaledBitmap);
 
 
                     }
@@ -121,14 +153,14 @@ public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapte
                 });
             }
         }
-
-
     }
 
     @Override
     public int getItemCount() {
        if(albums!= null){
            return albums.size();
+       }else if(top!=null){
+           return top.size();
        }else{
            return 0;
        }

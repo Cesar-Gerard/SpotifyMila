@@ -7,8 +7,11 @@ import com.google.gson.annotations.SerializedName;
 
 import javax.annotation.processing.Generated;
 
+import Interface.AlbumInterface;
+import modelApi.AlbumApi.Image;
+
 @Generated("jsonschema2pojo")
-public class Album {
+public class Album implements AlbumInterface {
 
     @SerializedName("name")
     @Expose
@@ -27,6 +30,11 @@ public class Album {
         return name;
     }
 
+    @Override
+    public String getArtist() {
+        return null;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -39,7 +47,7 @@ public class Album {
         this.playcount = playcount;
     }
 
-    public Artist getArtist() {
+    public Artist getArtist_() {
         return artist;
     }
 

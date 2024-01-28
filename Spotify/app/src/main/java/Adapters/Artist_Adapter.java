@@ -13,10 +13,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.spotify.Albums.MyMusic;
 import com.example.spotify.Download_Albums;
 import com.example.spotify.InsideArtist;
+import com.example.spotify.MainActivity;
 import com.example.spotify.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -73,20 +77,13 @@ public class Artist_Adapter extends RecyclerView.Adapter<Artist_Adapter.ViewHold
             @Override
             public void onClick(View v) {
 
-                InsideArtist fragmentoDestino = new InsideArtist();
-
                 // Crear un Bundle para pasar el objeto Album
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("album", item.getName());
 
-                // Asignar el Bundle al fragmento de destino
-                fragmentoDestino.setArguments(bundle);
+                NavController nav = Navigation.findNavController(context.getView());
 
-                // Realizar la transacción de fragmentos
-                FragmentTransaction transaction = context.requireActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.nav_host_fragment, fragmentoDestino);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                nav.navigate(R.id.action_global_insideArtist, bundle);
 
             }
         });

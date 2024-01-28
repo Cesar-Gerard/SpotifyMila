@@ -8,8 +8,11 @@ import com.google.gson.annotations.SerializedName;
 
 import javax.annotation.processing.Generated;
 
+import Interface.AlbumInterface;
+import modelApi.TopAlbums.Artist;
+
 @Generated("jsonschema2pojo")
-public class Album implements Serializable {
+public class Album implements Serializable, AlbumInterface {
 
     @SerializedName("name")
     @Expose
@@ -37,6 +40,11 @@ public class Album implements Serializable {
 
     public String getArtist() {
         return artist;
+    }
+
+    @Override
+    public Artist getArtist_() {
+        return null;
     }
 
     public void setArtist(String artist) {
