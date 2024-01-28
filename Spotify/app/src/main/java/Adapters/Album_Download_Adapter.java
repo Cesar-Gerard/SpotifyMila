@@ -1,6 +1,7 @@
 package Adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +9,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.spotify.Download_Albums;
 import com.example.spotify.R;
 
 import Loading.LoadingDialog;
@@ -25,16 +29,16 @@ public class Album_Download_Adapter extends RecyclerView.Adapter<Album_Download_
 
 
     Map<String, List<Album>> albums;
-    Context context;
+    Download_Albums context;
 
     private LoadingDialog loadingDialog;
     Image_Album_adapter adapter;
 
 
-    public Album_Download_Adapter(Map<String, List<Album>> entrada_albums, Context context) {
+    public Album_Download_Adapter(Map<String, List<Album>> entrada_albums, Download_Albums context) {
         albums = entrada_albums;
         this.context = context;
-        loadingDialog = new LoadingDialog(context);
+        loadingDialog = new LoadingDialog(context.getContext());
     }
 
     @NonNull
@@ -58,15 +62,28 @@ public class Album_Download_Adapter extends RecyclerView.Adapter<Album_Download_
         //Obtenim el primer artista
         String artist= artists.get(position);
 
-        holder.recycle.setLayoutManager(new GridLayoutManager(context,2, LinearLayoutManager.HORIZONTAL, false));
+        holder.recycle.setLayoutManager(new GridLayoutManager(context.getContext(),2, LinearLayoutManager.HORIZONTAL, false));
 
         holder.name.setText(artist);
 
         if(albums.get(artist)!=null && albums.get(artist).size()>0) {
-            adapter = new Image_Album_adapter(albums.get(artist), context);
+            adapter = new Image_Album_adapter(albums.get(artist), context.getContext());
             holder.recycle.setAdapter(adapter);
         }
 
+
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("album", artist);
+
+                NavController nav = Navigation.findNavController(context.getView());
+
+                nav.navigate(R.id.action_global_insideArtist, bundle);
+            }
+        });
 
 
         hideLoading();

@@ -169,7 +169,7 @@ public class Download_Albums extends Fragment {
     private void recycleAlbums(Map<String, List<Album>> albums) {
 
 
-        album_adapter = new Album_Download_Adapter(albums, this.getContext());
+        album_adapter = new Album_Download_Adapter(albums, this);
         binding.RecycleDownload.setAdapter(album_adapter);
 
 
@@ -195,7 +195,7 @@ public class Download_Albums extends Fragment {
 
 
     private void showLoadingBeforeSearchAlbum() {
-        album_adapter = new Album_Download_Adapter(new HashMap<>(), getContext());
+        album_adapter = new Album_Download_Adapter(new HashMap<>(), this);
         binding.RecycleDownload.setAdapter(album_adapter);
         handleLoadingAlbum();
     }
