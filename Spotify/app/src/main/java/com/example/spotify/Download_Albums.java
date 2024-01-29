@@ -3,6 +3,7 @@ package com.example.spotify;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
@@ -16,13 +17,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import API.LastFMManager;
-import Adapters.Album_Download_Adapter;
-import Adapters.Artist_Adapter;
-import modelApi.AlbumApi.Album;
-import modelApi.AlbumApi.SearchAlbum;
-import modelApi.ArtistApi.Artist;
-import modelApi.ArtistApi.SearchArtist;
+import com.example.spotify.API.LastFMManager;
+import com.example.spotify.Adapters.Album_Download_Adapter;
+import com.example.spotify.Adapters.Artist_Adapter;
+import com.example.spotify.ViewModel.DownloadAlbumViewModel;
+import com.example.spotify.ViewModel.DownloadArtistViewModel;
+import com.example.spotify.modelApi.AlbumApi.Album;
+import com.example.spotify.modelApi.AlbumApi.SearchAlbum;
+import com.example.spotify.modelApi.ArtistApi.Artist;
+import com.example.spotify.modelApi.ArtistApi.SearchArtist;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,6 +36,12 @@ public class Download_Albums extends Fragment {
     FragmentDownloadAlbumsBinding binding;
     LastFMManager manager;
 
+    DownloadAlbumViewModel viewModel;
+    DownloadArtistViewModel viewModelArtist;
+
+    Map<String, List<Album>> groupedAlbums= new HashMap<>();
+    List<Artist> resultArtist= new ArrayList<>();
+
     public static Artist_Adapter artist_adapter;
     public static Album_Download_Adapter album_adapter;
 
@@ -42,6 +51,9 @@ public class Download_Albums extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        viewModel= new ViewModelProvider(requireActivity()).get(DownloadAlbumViewModel.class);
+        viewModelArtist = new ViewModelProvider(requireActivity()).get(DownloadArtistViewModel.class);
+
     }
 
     @Override
@@ -49,6 +61,10 @@ public class Download_Albums extends Fragment {
                              Bundle savedInstanceState) {
 
         binding= FragmentDownloadAlbumsBinding.inflate(getLayoutInflater());
+
+        viewModel.setLlista(groupedAlbums);
+        viewModelArtist.setLlista(resultArtist);
+
 
         //Preparem la api
         manager = LastFMManager.getInstance();
@@ -99,10 +115,20 @@ public class Download_Albums extends Fragment {
             @Override
             public void onResponse(Call<SearchArtist> call, Response<SearchArtist> response) {
 
-                List<Artist> result = response.body().getResults().getArtistmatches().getArtist();
-                recycleArtists(result);
+                List<Artist> resultat = response.body().getResults().getArtistmatches().getArtist();
 
-                hideLoadingArtist();
+                resultArtist=resultat;
+
+                viewModelArtist.getLlistaArtista().observe(getViewLifecycleOwner(), artists -> {
+
+
+                    hideLoadingArtist();
+                    recycleArtists(resultArtist);
+
+
+                });
+
+
 
             }
 
@@ -124,8 +150,19 @@ public class Download_Albums extends Fragment {
                 List<Album> result = response.body().getResults().getAlbummatches().getAlbum();
 
                 if(result!=null && !result.isEmpty()){
-                    Map<String, List<Album>> groupedAlbums= groupedAlbumsByArtists(result);
-                    recycleAlbums(groupedAlbums);
+                    groupedAlbums= groupedAlbumsByArtists(result);
+
+
+                    viewModel.getLlistaAlbums().observe(getViewLifecycleOwner(),albums ->{
+
+                        hideLoadingAlbum();
+                        recycleAlbums(groupedAlbums);
+
+                    });
+
+
+
+
                 }
 
 
@@ -182,6 +219,9 @@ public class Download_Albums extends Fragment {
         binding.RecycleDownload.setAdapter(artist_adapter);
 
 
+
+
+
     }
     //endregion
 
@@ -231,8 +271,8 @@ public class Download_Albums extends Fragment {
 
     // Método para ocultar la pantalla de carga
     private void hideLoadingArtist() {
-        if (album_adapter != null) {
-            album_adapter.hideLoading();
+        if (artist_adapter != null) {
+            artist_adapter.hideLoading();
         }
     }
 

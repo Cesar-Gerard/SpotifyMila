@@ -15,7 +15,13 @@
         android:id="@+id/download_Albums"
         android:name="com.example.spotify.Download_Albums"
         android:label="fragment_download__albums"
-        tools:layout="@layout/fragment_download__albums" /><action android:id="@+id/action_global_download_Albums" app:destination="@id/download_Albums"/>
+        tools:layout="@layout/fragment_download__albums" >
+        <action
+            android:id="@+id/action_download_Albums_to_insideArtist"
+            app:destination="@id/insideArtist"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment><action android:id="@+id/action_global_download_Albums" app:destination="@id/download_Albums"/>
     <fragment
         android:id="@+id/album_Creation"
         android:name="com.example.spotify.Albums.Album_Creation"
@@ -47,5 +53,11 @@
         android:id="@+id/insideArtist"
         android:name="com.example.spotify.InsideArtist"
         android:label="artist_content"
-        tools:layout="@layout/artist_content" /><action android:id="@+id/action_global_insideArtist" app:destination="@id/insideArtist"/>
+        tools:layout="@layout/artist_content" >
+        <action
+            android:id="@+id/action_insideArtist_to_download_Albums2"
+            app:destination="@id/download_Albums"
+            app:enterAnim="@animator/nav_default_pop_enter_anim"
+            app:exitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
 </navigation>

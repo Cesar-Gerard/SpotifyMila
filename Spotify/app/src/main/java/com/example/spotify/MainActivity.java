@@ -12,7 +12,7 @@ import android.view.View;
 
 import com.example.spotify.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationView;
-import model.classes.Album;
+import com.example.spotify.model.classes.Album;
 
 public  class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -46,6 +46,9 @@ public  class MainActivity extends AppCompatActivity implements NavigationView.O
     private void porgramarMenuDesplagable() {
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         navigationview = findViewById(R.id.nav_view);
         navigationview.setNavigationItemSelectedListener(this);

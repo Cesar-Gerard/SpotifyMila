@@ -5,8 +5,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainer;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -21,7 +19,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import com.example.spotify.MainActivity;
 import com.example.spotify.R;
 import com.example.spotify.Songs.llista_cansons;
 import com.example.spotify.databinding.FragmentMyMusicBinding;
@@ -33,10 +30,10 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 
-import Adapters.Album_Adapter;
-import model.AlbumClickerListener;
-import model.AlbumInfoViewModel;
-import model.classes.Album;
+import com.example.spotify.Adapters.Album_Adapter;
+import com.example.spotify.model.AlbumClickerListener;
+import com.example.spotify.ViewModel.AlbumInfoViewModel;
+import com.example.spotify.model.classes.Album;
 
 
 public class MyMusic extends Fragment implements AlbumClickerListener{

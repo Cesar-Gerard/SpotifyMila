@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.os.Handler;
@@ -34,8 +33,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 
-import model.classes.Album;
-import model.formatters.DateUtils;
+import com.example.spotify.model.classes.Album;
+import com.example.spotify.model.formatters.DateUtils;
 
 public class Album_Creation extends Fragment implements Custom_Dialog_Image_Picker.OnImageSelectedListener {
 

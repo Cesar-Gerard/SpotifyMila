@@ -15,16 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.spotify.MainActivity;
 import com.example.spotify.databinding.FragmentSongCreationCustomDialogBinding;
 import com.example.spotify.Songs.llista_cansons;
 
 import java.util.List;
 
-import model.AlbumInfoViewModel;
-import model.classes.Album;
-import model.formatters.FormatTime;
-import model.classes.Song;
+import com.example.spotify.ViewModel.AlbumInfoViewModel;
+import com.example.spotify.model.classes.Album;
+import com.example.spotify.model.formatters.FormatTime;
+import com.example.spotify.model.classes.Song;
 
 
 public class Song_Creation_CustomDialog extends DialogFragment {

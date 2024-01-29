@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,22 +20,18 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import com.example.spotify.Albums.Album_Creation;
-import com.example.spotify.Albums.MyMusic;
-import com.example.spotify.MainActivity;
 import com.example.spotify.R;
 import com.example.spotify.databinding.FragmentLlistaCansonsBinding;
-import com.example.spotify.dialogs.Custom_Dialog_Image_Picker;
 import com.example.spotify.dialogs.Song_Creation_CustomDialog;
 import com.example.spotify.dialogs.delete_album_custom_dialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import Adapters.Song_Adapter;
-import model.AlbumInfoViewModel;
-import model.classes.Album;
-import model.classes.Song;
+import com.example.spotify.Adapters.Song_Adapter;
+import com.example.spotify.ViewModel.AlbumInfoViewModel;
+import com.example.spotify.model.classes.Album;
+import com.example.spotify.model.classes.Song;
 
 
 public class llista_cansons extends Fragment  {
