@@ -2,6 +2,8 @@
 package com.example.spotify.modelApi.TopAlbums;
 
 import java.util.List;
+
+import com.example.spotify.modelApi.AlbumApi.Album;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

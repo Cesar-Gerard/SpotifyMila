@@ -1,33 +1,46 @@
 
 package com.example.spotify.modelApi.AlbumApi;
 
+import android.graphics.Bitmap;
+
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 import java.util.List;
 
-import com.example.spotify.modelApi.TopAlbums.Artist;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import javax.annotation.processing.Generated;
 
-import com.example.spotify.Interface.AlbumInterface;
 
 @Generated("jsonschema2pojo")
-public class Album implements Serializable, AlbumInterface {
+public class Album implements Serializable {
+
+
+    private String artistname;
+
+
+
 
     @SerializedName("name")
     @Expose
     private String name;
 
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+
+
+    private Bitmap imageBitmap;
+
 
     @SerializedName("artist")
     @Expose
-    private String artist;
+    private Object artist;
+
+
+
     @SerializedName("image")
     @Expose
     private List<Image> image;
@@ -41,13 +54,9 @@ public class Album implements Serializable, AlbumInterface {
     }
 
     public String getArtist() {
-        return artist;
+        return artistname;
     }
 
-    @Override
-    public Artist getArtist_() {
-        return null;
-    }
 
     public void setArtist(String artist) {
         this.artist = artist;
@@ -62,5 +71,19 @@ public class Album implements Serializable, AlbumInterface {
         this.image = image;
     }
 
+
+    public Bitmap getImageBitmap() {
+        return imageBitmap;
+    }
+
+    public void setImageBitmap(Bitmap imageBitmap) {
+        this.imageBitmap = imageBitmap;
+    }
+
+    public void procesarArtist() {
+        if (artist instanceof String) {
+            artistname = (String) artist;
+        }
+    }
 
 }

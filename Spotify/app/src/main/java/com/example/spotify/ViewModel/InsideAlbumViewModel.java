@@ -5,10 +5,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 
-import com.example.spotify.modelApi.TopAlbums.Album;
+import com.example.spotify.modelApi.AlbumApi.Album;
 
 import java.util.List;
-import java.util.Map;
 
 public class InsideAlbumViewModel extends ViewModel {
 

@@ -14,9 +14,7 @@ public class Image {
     @SerializedName("#text")
     @Expose
     private String text;
-    @SerializedName("size")
-    @Expose
-    private String size;
+
 
 
 
@@ -38,12 +36,5 @@ public class Image {
         this.text = text;
     }
 
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
 
 }

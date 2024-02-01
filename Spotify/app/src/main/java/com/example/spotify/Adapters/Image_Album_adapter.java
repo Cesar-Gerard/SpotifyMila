@@ -9,23 +9,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.spotify.Loading.LoadingArtist;
-import com.example.spotify.Loading.LoadingDialog;
 import com.example.spotify.Loading.LoadingInsideArtist;
 import com.example.spotify.R;
-import com.example.spotify.modelApi.TopAlbums.Album;
+import com.example.spotify.modelApi.AlbumApi.Album;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.util.List;
 
-import com.example.spotify.Interface.AlbumInterface;
+
 
 public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapter.ViewHolder>{
 
@@ -90,11 +87,11 @@ public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapte
 
     }
 
-    private void CarregarImatge(@NonNull ViewHolder holder, int position, AlbumInterface item, int escala) {
-        if (item.getImage().get(1).getImageBitmap() != null) {
+    private void CarregarImatge(@NonNull ViewHolder holder, int position, Album item, int escala) {
+        if (item.getImageBitmap() != null) {
 
             if (holder.getAdapterPosition() == position) {
-                holder.imagen.setImageBitmap(item.getImage().get(1).getImageBitmap());
+                holder.imagen.setImageBitmap(item.getImageBitmap());
             }
 
 
@@ -114,7 +111,7 @@ public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapte
                 int heightInPx = (int) (escala * scale);
 
                 Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, widthInPx, heightInPx, true);
-                item.getImage().get(1).setImageBitmap(scaledBitmap);
+                item.setImageBitmap(scaledBitmap);
 
                 holder.imagen.setImageBitmap(scaledBitmap);
 
@@ -142,7 +139,7 @@ public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapte
                         int heightInPx = (int) (escala * scale);
 
                         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, widthInPx, heightInPx, true);
-                        item.getImage().get(1).setImageBitmap(scaledBitmap);
+                        item.setImageBitmap(scaledBitmap);
 
                         holder.imagen.setImageBitmap(scaledBitmap);
                     }
@@ -161,7 +158,7 @@ public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapte
                         holder.imagen.setImageBitmap(scaledBitmap);
 
 
-                        item.getImage().get(1).setImageBitmap(scaledBitmap);
+                        item.setImageBitmap(scaledBitmap);
 
 
                     }

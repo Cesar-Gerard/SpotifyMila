@@ -182,6 +182,7 @@ public class Download_Albums extends Fragment {
         Map<String, List<Album>> groupedAlbums = new HashMap<>();
 
         for(Album album: albums){
+            album.procesarArtist();
 
             String artista= album.getArtist().toString();
 

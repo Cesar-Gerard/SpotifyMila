@@ -12,18 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.spotify.Adapters.Artist_Adapter;
-import com.example.spotify.ViewModel.DownloadAlbumViewModel;
-import com.example.spotify.ViewModel.DownloadArtistViewModel;
 import com.example.spotify.ViewModel.InsideAlbumViewModel;
 import com.example.spotify.databinding.ArtistContentBinding;
 
 import com.example.spotify.API.LastFMManager;
 import com.example.spotify.Adapters.Image_Album_adapter;
+import com.example.spotify.modelApi.AlbumApi.Album;
 import com.example.spotify.modelApi.InfoApi.InfoArtist;
-import com.example.spotify.modelApi.TopAlbums.Album;
 import com.example.spotify.modelApi.TopAlbums.SearchTopAlbums;
-import com.example.spotify.modelApi.TopAlbums.Topalbums;
 
 import java.util.ArrayList;
 import java.util.List;
