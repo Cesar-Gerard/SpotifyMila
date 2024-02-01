@@ -1,6 +1,8 @@
 
 package com.example.spotify.modelApi.AlbumApi;
 
+import androidx.room.PrimaryKey;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -18,18 +20,17 @@ public class Album implements Serializable, AlbumInterface {
     @SerializedName("name")
     @Expose
     private String name;
+
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
     @SerializedName("artist")
     @Expose
     private String artist;
-    @SerializedName("url")
-    @Expose
-    private String url;
     @SerializedName("image")
     @Expose
     private List<Image> image;
-    @SerializedName("mbid")
-    @Expose
-    private String mbid;
 
     public String getName() {
         return name;
@@ -52,13 +53,6 @@ public class Album implements Serializable, AlbumInterface {
         this.artist = artist;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
 
     public List<Image> getImage() {
         return image;
@@ -68,13 +62,5 @@ public class Album implements Serializable, AlbumInterface {
         this.image = image;
     }
 
-
-    public String getMbid() {
-        return mbid;
-    }
-
-    public void setMbid(String mbid) {
-        this.mbid = mbid;
-    }
 
 }

@@ -1,6 +1,9 @@
 
 package com.example.spotify.modelApi.TopAlbums;
 
+import androidx.room.ColumnInfo;
+import androidx.room.PrimaryKey;
+
 import java.util.List;
 
 import com.example.spotify.modelApi.AlbumApi.Image;
@@ -14,12 +17,13 @@ import com.example.spotify.Interface.AlbumInterface;
 @Generated("jsonschema2pojo")
 public class Album implements AlbumInterface {
 
+
+
+    @ColumnInfo(name = "album_title")
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("playcount")
-    @Expose
-    private Integer playcount;
+
     @SerializedName("artist")
     @Expose
     private Artist artist;
@@ -40,13 +44,6 @@ public class Album implements AlbumInterface {
         this.name = name;
     }
 
-    public Integer getPlaycount() {
-        return playcount;
-    }
-
-    public void setPlaycount(Integer playcount) {
-        this.playcount = playcount;
-    }
 
     public Artist getArtist_() {
         return artist;
