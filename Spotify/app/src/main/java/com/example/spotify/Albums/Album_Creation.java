@@ -105,10 +105,10 @@ public class Album_Creation extends Fragment implements Custom_Dialog_Image_Pick
     private void setUpAlbum() {
 
         b.edtAlbumTitle.setText(entrada.getName());
-        b.edtAuthorName.setText(entrada.getAuthor());
+        b.edtAuthorName.setText(entrada.getArtistname());
         b.editText.setText(DateUtils.formatDateToDayMonthYear(entrada.getDate()));
 
-        b.imgPickerReal.setImageBitmap(entrada.getBitmap());
+        b.imgPickerReal.setImageBitmap(entrada.getImageBitmap());
 
         control = true;
 
@@ -159,7 +159,7 @@ public class Album_Creation extends Fragment implements Custom_Dialog_Image_Pick
 
 
                     Album.list_albums.get(posicio).setName(b.edtAlbumTitle.getText().toString());
-                    Album.list_albums.get(posicio).setAuthor(b.edtAuthorName.getText().toString());
+                    Album.list_albums.get(posicio).setArtistname(b.edtAuthorName.getText().toString());
                     Album.list_albums.get(posicio).setDate(DateUtils.parseDayMonthYear(b.editText.getText().toString()));
 
                     Bitmap bitmap = BitmapFactory.decodeFile(pathImage);
@@ -171,7 +171,7 @@ public class Album_Creation extends Fragment implements Custom_Dialog_Image_Pick
 
                     if(bitmap!=null){
                         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, widthInPx, heightInPx, true);
-                        Album.list_albums.get(posicio).setBitmap(scaledBitmap);
+                        Album.list_albums.get(posicio).setImageBitmap(scaledBitmap);
                     }
 
                     Album.list_albums.get(posicio).setSelected(false);

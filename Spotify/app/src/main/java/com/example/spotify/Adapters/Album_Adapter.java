@@ -50,7 +50,7 @@ public class Album_Adapter extends RecyclerView.Adapter<Album_Adapter.ViewHolder
 
         //Configurem la info del item que anem a mostrar
         holder.titlealbum.setText(a.getName());
-        holder.authoralbum.setText(a.getAuthor());
+        holder.authoralbum.setText(a.getArtistname());
         holder.datealbum.setText(DateUtils.formatDateToDayMonthYear(a.getDate()));
         holder.numsongs.setText(String.valueOf(a.getConsons_Album().size()));
 
@@ -58,7 +58,7 @@ public class Album_Adapter extends RecyclerView.Adapter<Album_Adapter.ViewHolder
 
         //#region ImageLoader
 
-        if(a.getBitmap()!=null){
+        if(a.getImageBitmap()!=null){
 
             //#region Escalem el bitmap de la imatge
             float scale = context.getResources().getDisplayMetrics().density;
@@ -67,9 +67,9 @@ public class Album_Adapter extends RecyclerView.Adapter<Album_Adapter.ViewHolder
             int heightInPx = (int) (140 * scale);
 
 
-            Bitmap scaledBitmap = Bitmap.createScaledBitmap(a.getBitmap(), widthInPx, heightInPx, true);
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(a.getImageBitmap(), widthInPx, heightInPx, true);
 
-            a.setBitmap(scaledBitmap);
+            a.setImageBitmap(scaledBitmap);
 
 
             holder.imgalbum.setImageBitmap(scaledBitmap);
@@ -103,7 +103,7 @@ public class Album_Adapter extends RecyclerView.Adapter<Album_Adapter.ViewHolder
 
 
                     //Si s'ha pogut completar la cerca de la imatge, la establim com imatge del imageview
-                    a.setBitmap(loadedImage);
+                    a.setImageBitmap(loadedImage);
                     holder.imgalbum.setImageBitmap(loadedImage);
 
                 }

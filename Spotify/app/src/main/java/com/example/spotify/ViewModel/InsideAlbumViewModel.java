@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 
-import com.example.spotify.modelApi.AlbumApi.Album;
+import com.example.spotify.model.classes.Album;
 
 import java.util.List;
 

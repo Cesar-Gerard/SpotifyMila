@@ -17,7 +17,7 @@ import com.example.spotify.databinding.ArtistContentBinding;
 
 import com.example.spotify.API.LastFMManager;
 import com.example.spotify.Adapters.Image_Album_adapter;
-import com.example.spotify.modelApi.AlbumApi.Album;
+import com.example.spotify.model.classes.Album;
 import com.example.spotify.modelApi.InfoApi.InfoArtist;
 import com.example.spotify.modelApi.TopAlbums.SearchTopAlbums;
 

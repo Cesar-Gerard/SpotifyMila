@@ -252,11 +252,11 @@ public class llista_cansons extends Fragment  {
 
     //Presentació de les dades del album
     public static void setUpAlbumInfo() {
-        b.txvNameArtist.setText(entrada.getAuthor().toString());
+        b.txvNameArtist.setText(entrada.getArtistname().toString());
 
         b.txvAlbumName.setText(entrada.getName().toString());
 
-        b.imgAlbum.setImageBitmap(entrada.getBitmap());
+        b.imgAlbum.setImageBitmap(entrada.getImageBitmap());
 
 
     }

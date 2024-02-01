@@ -1,25 +1,43 @@
 package com.example.spotify.model.classes;
 
 import android.graphics.Bitmap;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.example.spotify.model.formatters.DateUtils;
+import com.example.spotify.modelApi.AlbumApi.Image;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-public class Album {
+import javax.annotation.processing.Generated;
+
+@Generated("jsonschema2pojo")
+public class Album implements Serializable {
 
 
     int id;
-    String name;
+    @SerializedName("name")
+    @Expose
+    private String name;
     String ImageUrl;
 
-    String author;
+    @SerializedName("image")
+    @Expose
+    private List<Image> image;
+    @SerializedName("artist")
+    @Expose
+    private Object artist;
+    String artistname;
     Date date;
 
     boolean selected;
 
      List<Song> consons_Album;
+
+    Bitmap imageBitmap;
 
     public static List<Album> list_albums=null;
 
@@ -29,7 +47,7 @@ public class Album {
         this.id = id;
         this.name = name;
         ImageUrl = imageUrl;
-        this.author = author;
+        this.artistname = author;
         this.date = date;
         this.consons_Album= new ArrayList<>();
     }
@@ -37,8 +55,8 @@ public class Album {
     public Album(int id, String name, Bitmap bitmap, String author, Date date) {
         this.id = id;
         this.name = name;
-        this.bitmap = bitmap;
-        this.author = author;
+        this.imageBitmap = bitmap;
+        this.artistname = author;
         this.date = date;
         this.consons_Album= new ArrayList<>();
     }
@@ -82,23 +100,37 @@ public class Album {
         this.date = date;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getArtistname() {
+        return artistname;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setArtistname(String artistname) {
+        this.artistname = artistname;
     }
 
 
-    Bitmap bitmap;
-
-    public Bitmap getBitmap() {
-        return bitmap;
+    public List<Image> getImage() {
+        return image;
     }
 
-    public void setBitmap(Bitmap bitmap) {
-        this.bitmap = bitmap;
+    public void setImage(List<Image> image) {
+        this.image = image;
+    }
+
+    public Object getArtist() {
+        return artist;
+    }
+
+    public void setArtist(Object artist) {
+        this.artist = artist;
+    }
+
+    public Bitmap getImageBitmap() {
+        return imageBitmap;
+    }
+
+    public void setImageBitmap(Bitmap imageBitmap) {
+        this.imageBitmap = imageBitmap;
         this.ImageUrl = null;
     }
 
@@ -257,6 +289,15 @@ public class Album {
             return -1;
         }else{
             return -1;
+        }
+    }
+
+
+    public void procesarArtist() {
+        if (artist instanceof String) {
+            // Es una cadena de texto
+            String artistString = (String) artist;
+
         }
     }
 

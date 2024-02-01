@@ -18,7 +18,7 @@ import com.example.spotify.Download_Albums;
 import com.example.spotify.R;
 
 import com.example.spotify.Loading.LoadingDialog;
-import com.example.spotify.modelApi.AlbumApi.Album;
+import com.example.spotify.model.classes.Album;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -262,10 +262,10 @@ public class Song_Creation_CustomDialog extends DialogFragment {
         int posicio = Album.list_albums.indexOf(entrada);
 
         Album.list_albums.get(posicio).setConsons_Album(entrada.getConsons_Album());
-        Album.list_albums.get(posicio).setBitmap(entrada.getBitmap());
+        Album.list_albums.get(posicio).setImageBitmap(entrada.getImageBitmap());
         Album.list_albums.get(posicio).setId(entrada.getId());
         Album.list_albums.get(posicio).setName(entrada.getName());
-        Album.list_albums.get(posicio).setAuthor(entrada.getAuthor());
+        Album.list_albums.get(posicio).setArtistname(entrada.getArtistname());
         Album.list_albums.get(posicio).setDate(entrada.getDate());
         Album.list_albums.get(posicio).setImageUrl(entrada.getImageUrl());
         Album.list_albums.get(posicio).setSelected(entrada.isSelected());

@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.spotify.Loading.LoadingInsideArtist;
 import com.example.spotify.R;
-import com.example.spotify.modelApi.AlbumApi.Album;
+import com.example.spotify.model.classes.Album;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -26,7 +26,7 @@ import java.util.List;
 
 public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapter.ViewHolder>{
 
-    List<com.example.spotify.modelApi.AlbumApi.Album> albums;
+    List<Album> albums;
     List<Album> top;
     Context context;
 
@@ -34,7 +34,7 @@ public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapte
 
     private LoadingInsideArtist loadingDialog;
 
-    public Image_Album_adapter(List<com.example.spotify.modelApi.AlbumApi.Album> albums, Context context) {
+    public Image_Album_adapter(List<Album> albums, Context context) {
         this.albums=albums;
         this.context=context;
         isTop=false;
@@ -72,7 +72,7 @@ public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapte
         if(albums!=null) {
 
 
-            com.example.spotify.modelApi.AlbumApi.Album item = albums.get(position);
+            Album item = albums.get(position);
 
 
             CarregarImatge(holder, position, item, 120);

@@ -22,7 +22,7 @@ import com.example.spotify.Adapters.Album_Download_Adapter;
 import com.example.spotify.Adapters.Artist_Adapter;
 import com.example.spotify.ViewModel.DownloadAlbumViewModel;
 import com.example.spotify.ViewModel.DownloadArtistViewModel;
-import com.example.spotify.modelApi.AlbumApi.Album;
+import com.example.spotify.model.classes.Album;
 import com.example.spotify.modelApi.AlbumApi.SearchAlbum;
 import com.example.spotify.modelApi.ArtistApi.Artist;
 import com.example.spotify.modelApi.ArtistApi.SearchArtist;
