@@ -1,8 +1,10 @@
 package com.example.spotify.API;
 
+import com.example.spotify.model.classes.Album;
 import com.example.spotify.modelApi.AlbumApi.SearchAlbum;
 import com.example.spotify.modelApi.ArtistApi.SearchArtist;
 import com.example.spotify.modelApi.InfoApi.InfoArtist;
+import com.example.spotify.modelApi.SongsAlbum.SongsAlbum;
 import com.example.spotify.modelApi.TopAlbums.SearchTopAlbums;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,6 +59,11 @@ public class LastFMManager {
 
     public void getInfoArtist (String artista, Callback<InfoArtist> callback){
         Call<InfoArtist> call = mApiService.getInfoArtist("artist.getinfo",artista, TOKEN, FORMAT);
+        call.enqueue(callback);
+    }
+
+    public void getSongs (String artista,String album, Callback<SongsAlbum> callback){
+        Call<SongsAlbum> call = mApiService.getSongs("album.getinfo",TOKEN,artista,album, FORMAT);
         call.enqueue(callback);
     }
 

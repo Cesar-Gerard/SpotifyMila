@@ -1,5 +1,8 @@
 package com.example.spotify.model.classes;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class Song {
 
     int id;
@@ -7,9 +10,18 @@ public class Song {
 
     boolean selected;
 
+    @SerializedName("name")
+    @Expose
     String name;
 
-   String time;
+
+    String time;
+
+
+    @SerializedName("duration")
+    @Expose
+    private Long time_original;
+
 
     public Song(int id, boolean like, String name, String time) {
         this.id = id;
@@ -59,6 +71,15 @@ public class Song {
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
+
+    public Long getTime_original() {
+        return time_original;
+    }
+
+    public void setTime_original(Long time_original) {
+        this.time_original = time_original;
+    }
+
 
     //#endregion
 }

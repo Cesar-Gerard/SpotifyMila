@@ -184,7 +184,7 @@ public class Download_Albums extends Fragment {
         for(Album album: albums){
             album.procesarArtist();
 
-            String artista= album.getArtist().toString();
+            String artista= album.getArtistname();
 
             if(groupedAlbums.containsKey(artista)){
                 groupedAlbums.get(artista).add(album);

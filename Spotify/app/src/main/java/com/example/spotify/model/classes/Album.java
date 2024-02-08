@@ -2,6 +2,11 @@ package com.example.spotify.model.classes;
 
 import android.graphics.Bitmap;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,36 +14,71 @@ import java.util.List;
 
 import com.example.spotify.model.formatters.DateUtils;
 import com.example.spotify.modelApi.AlbumApi.Image;
+import com.example.spotify.modelApi.ArtistApi.Artist;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.internal.LinkedTreeMap;
 
 import javax.annotation.processing.Generated;
-
+@Entity
 @Generated("jsonschema2pojo")
 public class Album implements Serializable {
 
 
+
+    @PrimaryKey
     int id;
+
+
+    @ColumnInfo(name = "albumName")
     @SerializedName("name")
     @Expose
     private String name;
+
+    @Ignore
     String ImageUrl;
+
 
     @SerializedName("image")
     @Expose
+    @Ignore
     private List<Image> image;
+
     @SerializedName("artist")
     @Expose
+    @Ignore
     private Object artist;
+
+    @ColumnInfo(name = "artistname")
     String artistname;
+
+    @Ignore
     Date date;
 
+
+    @ColumnInfo(name = "dateCreation")
+    private long timeStamp;
+
+
+    @Ignore
     boolean selected;
 
+    @SerializedName("tracks")
+    @Expose
+    @Ignore
+    private Songs llista_cansons;
+
+    @Ignore
      List<Song> consons_Album;
 
-    Bitmap imageBitmap;
 
+    @Ignore
+     Bitmap imageBitmap;
+
+    @ColumnInfo(name = "albumImage")
+     private byte[] fromBitmap;
+
+     @Ignore
     public static List<Album> list_albums=null;
 
     //#region Constuctors
@@ -61,9 +101,23 @@ public class Album implements Serializable {
         this.consons_Album= new ArrayList<>();
     }
 
-    public Album() {
+    public Album() {}
 
+    public Album(int id, String name, String artistname, long timeStamp, byte[] fromBitmap) {
+        this.id = id;
+        this.name = name;
+        this.artistname = artistname;
+        this.timeStamp = timeStamp;
+        this.fromBitmap = fromBitmap;
     }
+
+    public Album(String name, String artistname, long timeStamp, byte[] fromBitmap) {
+        this.name = name;
+        this.artistname = artistname;
+        this.timeStamp = timeStamp;
+        this.fromBitmap = fromBitmap;
+    }
+
     //#endregion
 
     //#region Getters i Setters
@@ -117,8 +171,26 @@ public class Album implements Serializable {
         this.image = image;
     }
 
-    public Object getArtist() {
-        return artist;
+    public Artist getArtist() {
+        if (artist instanceof LinkedTreeMap) {
+            LinkedTreeMap<String, Object> artistMap = (LinkedTreeMap<String, Object>) artist;
+
+            // Aquí deberías tener las claves adecuadas para mapear el objeto LinkedTreeMap a un objeto Artist
+            String name = (String) artistMap.get("name");
+            // Obtener otros campos necesarios del LinkedTreeMap
+
+            // Construir y devolver un nuevo objeto Artist con los valores obtenidos
+            Artist newArtist = new Artist();
+            newArtist.setName(name);
+            // Setear otros campos necesarios en el objeto Artist
+
+            return newArtist;
+
+        }
+
+        Artist resposta = new Artist();
+        resposta.setName(artistname);
+        return resposta;
     }
 
     public void setArtist(Object artist) {
@@ -148,6 +220,30 @@ public class Album implements Serializable {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public long getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(long timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    public byte[] getFromBitmap() {
+        return fromBitmap;
+    }
+
+    public void setFromBitmap(byte[] fromBitmap) {
+        this.fromBitmap = fromBitmap;
+    }
+
+    public Songs getLlista_cansons() {
+        return llista_cansons;
+    }
+
+    public void setLlista_cansons(Songs llista_cansons) {
+        this.llista_cansons = llista_cansons;
     }
 
 
@@ -294,9 +390,9 @@ public class Album implements Serializable {
 
 
     public void procesarArtist() {
-        if (artist instanceof String) {
+         if (artist instanceof String) {
             // Es una cadena de texto
-            String artistString = (String) artist;
+            artistname = (String) artist;
 
         }
     }

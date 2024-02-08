@@ -2,23 +2,34 @@ package com.example.spotify;
 
 import android.os.Bundle;
 
+import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.spotify.Albums.Album_Creation;
+import com.example.spotify.Albums.MyMusic;
+import com.example.spotify.ViewModel.AlbumInfoViewModel;
 import com.example.spotify.ViewModel.InsideAlbumViewModel;
 import com.example.spotify.databinding.ArtistContentBinding;
 
 import com.example.spotify.API.LastFMManager;
 import com.example.spotify.Adapters.Image_Album_adapter;
+import com.example.spotify.dialogs.delete_album_custom_dialog;
+import com.example.spotify.dialogs.download_album_customDialog;
 import com.example.spotify.model.classes.Album;
 import com.example.spotify.modelApi.InfoApi.InfoArtist;
+import com.example.spotify.modelApi.SongsAlbum.SongsAlbum;
 import com.example.spotify.modelApi.TopAlbums.SearchTopAlbums;
 
 import java.util.ArrayList;
@@ -38,8 +49,14 @@ public class InsideArtist extends Fragment {
 
     InsideAlbumViewModel viewModel;
 
+    static AlbumInfoViewModel viewAlbum;
 
-    List<Album> albums= new ArrayList<>();
+    public ActionMode.Callback actionModeCallback;
+
+
+    static List<Album> albums= new ArrayList<>();
+
+
 
 
     @Override
@@ -47,6 +64,7 @@ public class InsideArtist extends Fragment {
         super.onCreate(savedInstanceState);
 
         viewModel= new ViewModelProvider(requireActivity()).get(InsideAlbumViewModel.class);
+        viewAlbum= new ViewModelProvider(requireActivity()).get(AlbumInfoViewModel.class);
 
     }
 
@@ -72,6 +90,7 @@ public class InsideArtist extends Fragment {
 
             getTopAlbums(parametro);
             getArtistInfo(parametro);
+            setUpActionBar();
 
 
             binding.TitleName.setText(parametro);
@@ -83,6 +102,56 @@ public class InsideArtist extends Fragment {
 
         View v= binding.getRoot();
         return v;
+    }
+
+
+
+    public void setUpActionBar() {
+
+        actionModeCallback = new ActionMode.Callback() {
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                MenuInflater inflater = mode.getMenuInflater();
+                inflater.inflate(R.menu.contextual_download_album, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+
+                //Comportament segons el item del menu seleccionat
+                if (item.getItemId() == R.id.action_download) {
+
+                    confirmarDownload();
+                    mode.finish(); // Finaliza el Action Mode
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+
+                //adapter.notifyDataSetChanged();
+            }
+
+
+        };
+
+
+    }
+
+    private void confirmarDownload() {
+
+        download_album_customDialog customDialog = new download_album_customDialog(InsideArtist.this);
+
+        customDialog.show(getFragmentManager(), "CustomDialogFragment");
+
     }
 
     private void customButton() {
@@ -134,7 +203,7 @@ public class InsideArtist extends Fragment {
 
                     hideLoading();
 
-                    adapter = new Image_Album_adapter(albums,InsideArtist.this.getContext(),true);
+                    adapter = new Image_Album_adapter(albums,InsideArtist.this,InsideArtist.this.getContext(),true);
                     binding.LlistaAlbums.setLayoutManager(new GridLayoutManager(InsideArtist.this.getContext(),2, LinearLayoutManager.VERTICAL, false));
                     binding.LlistaAlbums.setAdapter(adapter);
 
@@ -152,10 +221,28 @@ public class InsideArtist extends Fragment {
                 Log.e("Error getTopAlbumsArtist()", t.getLocalizedMessage());
             }
         });
+
+
+
     }
 
 
+    public static void downloadItemSelected() {
 
+
+        // Itera sobre musicList para identificar elementos seleccionados
+        for (Album item : albums) {
+            if (item.isSelected()) {
+                item.setId(Album.list_albums.size());
+                viewAlbum.insert(item);
+            }
+        }
+
+
+
+
+
+    }
 
 
     private void handleLoading() {
@@ -168,7 +255,7 @@ public class InsideArtist extends Fragment {
 
 
     private void showLoadingBeforeSearch() {
-        adapter = new Image_Album_adapter(new ArrayList<>(), InsideArtist.this.getContext(),true);
+        adapter = new Image_Album_adapter(new ArrayList<>(), InsideArtist.this,InsideArtist.this.getContext(),true);
         binding.LlistaAlbums.setAdapter(adapter);
         handleLoading();
     }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.spotify.Albums.MyMusic;
 import com.example.spotify.R;
+import com.example.spotify.ViewModel.AlbumInfoViewModel;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -27,12 +28,15 @@ public class Album_Adapter extends RecyclerView.Adapter<Album_Adapter.ViewHolder
     MyMusic context;
     AlbumClickerListener listener;
 
+    AlbumInfoViewModel viewModel;
+
 
     //#region Constructor
-    public Album_Adapter(List<Album> albums, MyMusic a, AlbumClickerListener listener) {
+    public Album_Adapter(List<Album> albums, MyMusic a, AlbumClickerListener listener, AlbumInfoViewModel viewModel) {
         this.albums = albums;
         context=a;
         this.listener=listener;
+        this.viewModel=viewModel;
     }
     //#endregion
 
@@ -105,6 +109,8 @@ public class Album_Adapter extends RecyclerView.Adapter<Album_Adapter.ViewHolder
                     //Si s'ha pogut completar la cerca de la imatge, la establim com imatge del imageview
                     a.setImageBitmap(loadedImage);
                     holder.imgalbum.setImageBitmap(loadedImage);
+
+                    viewModel.insert(a);
 
                 }
 

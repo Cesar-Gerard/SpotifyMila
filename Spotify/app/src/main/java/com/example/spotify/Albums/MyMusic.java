@@ -71,8 +71,12 @@ public class MyMusic extends Fragment implements AlbumClickerListener{
         b = FragmentMyMusicBinding.inflate(getLayoutInflater());
         View v = b.getRoot();
 
-        viewModel.setLlista(Album.list_albums);
 
+
+
+
+
+        viewModel.setLlista(Album.list_albums);
 
 
         setupUniversalImageLoader();
@@ -84,7 +88,6 @@ public class MyMusic extends Fragment implements AlbumClickerListener{
         setUpActionBar();
 
         setUpFloatingButton();
-
 
 
 
@@ -224,8 +227,11 @@ public class MyMusic extends Fragment implements AlbumClickerListener{
 
         viewModel.getLlistaAlbums().observe(getViewLifecycleOwner(), albums -> {
 
-            adapter= new Album_Adapter(albums, this,this);
+            adapter= new Album_Adapter(albums, this,this,viewModel);
             b.rcyAlbums.setAdapter(adapter);
+
+
+
 
         });
 

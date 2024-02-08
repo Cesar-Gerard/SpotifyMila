@@ -11,17 +11,26 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ActionMode;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.spotify.API.LastFMManager;
+import com.example.spotify.InsideArtist;
 import com.example.spotify.Loading.LoadingInsideArtist;
 import com.example.spotify.R;
 import com.example.spotify.model.classes.Album;
+import com.example.spotify.modelApi.ArtistApi.Artist;
+import com.example.spotify.modelApi.SongsAlbum.SongsAlbum;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapter.ViewHolder>{
@@ -30,7 +39,11 @@ public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapte
     List<Album> top;
     Context context;
 
+    InsideArtist inside;
+
     boolean isTop;
+
+
 
     private LoadingInsideArtist loadingDialog;
 
@@ -40,10 +53,11 @@ public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapte
         isTop=false;
     }
 
-    public Image_Album_adapter(List<Album> album, Context context, boolean isTop) {
+    public Image_Album_adapter(List<Album> album, InsideArtist clase,Context context, boolean isTop) {
         top=album;
+        inside= clase;
         this.context=context;
-        loadingDialog= new LoadingInsideArtist(context);
+        loadingDialog= new LoadingInsideArtist(inside.getContext());
         this.isTop=isTop;
 
     }
@@ -59,6 +73,7 @@ public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapte
 
         }else{
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.album_image_item2,parent,false);
+
         }
 
 
@@ -79,7 +94,23 @@ public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapte
         }else if(top != null){
 
             Album itemTop = top.get(position);
+            itemTop.setArtistname(itemTop.getArtist().getName());
             CarregarImatge(holder, position, itemTop, 150);
+
+
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemTop.setSelected(true);
+                    ((AppCompatActivity)inside.getContext()).startSupportActionMode(inside.actionModeCallback);
+
+
+
+                }
+            });
+
+
 
 
         }
