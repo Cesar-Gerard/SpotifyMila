@@ -1,11 +1,13 @@
 package com.example.spotify;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -17,21 +19,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.spotify.Albums.Album_Creation;
-import com.example.spotify.Albums.MyMusic;
 import com.example.spotify.ViewModel.AlbumInfoViewModel;
 import com.example.spotify.ViewModel.InsideAlbumViewModel;
 import com.example.spotify.databinding.ArtistContentBinding;
 
 import com.example.spotify.API.LastFMManager;
 import com.example.spotify.Adapters.Image_Album_adapter;
-import com.example.spotify.dialogs.delete_album_custom_dialog;
 import com.example.spotify.dialogs.download_album_customDialog;
 import com.example.spotify.model.classes.Album;
+import com.example.spotify.model.formatters.BitmapUtils;
 import com.example.spotify.modelApi.InfoApi.InfoArtist;
-import com.example.spotify.modelApi.SongsAlbum.SongsAlbum;
 import com.example.spotify.modelApi.TopAlbums.SearchTopAlbums;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +52,7 @@ public class InsideArtist extends Fragment {
     static AlbumInfoViewModel viewAlbum;
 
     public ActionMode.Callback actionModeCallback;
+
 
 
     static List<Album> albums= new ArrayList<>();
@@ -227,14 +228,35 @@ public class InsideArtist extends Fragment {
     }
 
 
-    public static void downloadItemSelected() {
+    public static void downloadItemSelected(Context context) {
+
 
 
         // Itera sobre musicList para identificar elementos seleccionados
         for (Album item : albums) {
             if (item.isSelected()) {
-                item.setId(Album.list_albums.size());
-                viewAlbum.insert(item);
+
+                    item.setDownload(true);
+                    item.setId(Album.list_albums.size());
+                    item.setId(item.getId() + 1);
+                    item.setDate(null);
+                    item.setImageBitmap(item.getImage().get(1).getImageBitmap());
+                    File guardar = BitmapUtils.saveBitmapToGallery(item.getImageBitmap(), item);
+                    if (guardar != null) {
+                        item.setImagepath(BitmapUtils.getFilePath(guardar));
+                    }
+                    viewAlbum.insert(item);
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setMessage("Album descarregat")
+                            .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+
+                                }
+                            });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
             }
         }
 

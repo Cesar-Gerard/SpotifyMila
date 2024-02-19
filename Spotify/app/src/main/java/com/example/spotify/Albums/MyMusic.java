@@ -1,15 +1,20 @@
 package com.example.spotify.Albums;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,7 +49,7 @@ public class MyMusic extends Fragment implements AlbumClickerListener{
 
    public static Album_Adapter adapter;
 
-   AlbumInfoViewModel viewModel;
+   static AlbumInfoViewModel viewModel;
 
 
 
@@ -72,11 +77,15 @@ public class MyMusic extends Fragment implements AlbumClickerListener{
         View v = b.getRoot();
 
 
+        LiveData<List<Album>> users =  viewModel.getAlbums();
+        users.observe(getActivity(),elsUsuaris -> {
+                    Log.d("XXX", "usuaris:"+elsUsuaris);
+                    viewModel.setLlista(elsUsuaris);
+                    Album.list_albums=viewModel.getLlistaAlbums().getValue();
+                }
+        );
 
 
-
-
-        viewModel.setLlista(Album.list_albums);
 
 
         setupUniversalImageLoader();
@@ -88,9 +97,6 @@ public class MyMusic extends Fragment implements AlbumClickerListener{
         setUpActionBar();
 
         setUpFloatingButton();
-
-
-
 
 
         return v;
@@ -135,8 +141,19 @@ public class MyMusic extends Fragment implements AlbumClickerListener{
 
                     mode.finish();
 
-                    Navigation.findNavController(MyMusic.this.getView()).navigate(R.id.action_global_album_Creation);
+                    if(Album_Creation.entrada.isDownload()){
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setMessage("No pots editar un album descarregat.ROBAR ESTA MALAMENT")
+                                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
 
+                                    }
+                                });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }else {
+                        Navigation.findNavController(MyMusic.this.getView()).navigate(R.id.action_global_album_Creation);
+                    }
 
                 }
                 return false;
@@ -169,8 +186,11 @@ public class MyMusic extends Fragment implements AlbumClickerListener{
         // Elimina los elementos seleccionados de musicList
         Album.list_albums.removeAll(selectedItems);
 
+        viewModel.delete(selectedItems.get(0));
+
         // Notifica al adaptador del cambio
         adapter.notifyDataSetChanged();
+
     }
 
 
@@ -227,7 +247,7 @@ public class MyMusic extends Fragment implements AlbumClickerListener{
 
         viewModel.getLlistaAlbums().observe(getViewLifecycleOwner(), albums -> {
 
-            adapter= new Album_Adapter(albums, this,this,viewModel);
+            adapter= new Album_Adapter(albums, this,this);
             b.rcyAlbums.setAdapter(adapter);
 
 
@@ -254,6 +274,7 @@ public class MyMusic extends Fragment implements AlbumClickerListener{
 
     @Override
     public void AlbumClicked(Album entrada) {
+        entrada.setConsons_Album(new ArrayList<>());
         llista_cansons.entrada=entrada;
         //if(MainActivity.v==null)
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {

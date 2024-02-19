@@ -53,7 +53,7 @@ public class download_album_customDialog extends DialogFragment {
             public void onClick(View v) {
 
                 if(entrada instanceof InsideArtist){
-                    InsideArtist.downloadItemSelected();
+                    InsideArtist.downloadItemSelected(download_album_customDialog.this.getContext());
                 }
                 download_album_customDialog.this.dismiss();
 

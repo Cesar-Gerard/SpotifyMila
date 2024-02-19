@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.example.spotify.MainActivity;
+import com.example.spotify.model.formatters.BitmapUtils;
 import com.example.spotify.model.formatters.DateUtils;
 import com.example.spotify.modelApi.AlbumApi.Image;
 import com.example.spotify.modelApi.ArtistApi.Artist;
@@ -25,9 +27,10 @@ import javax.annotation.processing.Generated;
 public class Album implements Serializable {
 
 
+    //region atributs
 
-    @PrimaryKey
-    int id;
+    @PrimaryKey(autoGenerate = true)
+    long id;
 
 
     @ColumnInfo(name = "albumName")
@@ -35,8 +38,11 @@ public class Album implements Serializable {
     @Expose
     private String name;
 
-    @Ignore
+    @ColumnInfo(name = "albumUrl")
     String ImageUrl;
+
+    @ColumnInfo(name = "albumPath")
+    String imagepath;
 
 
     @SerializedName("image")
@@ -52,12 +58,8 @@ public class Album implements Serializable {
     @ColumnInfo(name = "artistname")
     String artistname;
 
-    @Ignore
+    @ColumnInfo(name = "albumDateCreation")
     Date date;
-
-
-    @ColumnInfo(name = "dateCreation")
-    private long timeStamp;
 
 
     @Ignore
@@ -72,61 +74,71 @@ public class Album implements Serializable {
      List<Song> consons_Album;
 
 
+
     @Ignore
      Bitmap imageBitmap;
 
-    @ColumnInfo(name = "albumImage")
-     private byte[] fromBitmap;
 
      @Ignore
     public static List<Album> list_albums=null;
 
+
+     @ColumnInfo(name = "Downloaded")
+     boolean download;
+
+     //endregion
+
     //#region Constuctors
 
-    public Album(int id, String name, String imageUrl, String author, Date date) {
-        this.id = id;
+    public Album(String name, String imageUrl, String author, Date date) {
         this.name = name;
         ImageUrl = imageUrl;
         this.artistname = author;
         this.date = date;
         this.consons_Album= new ArrayList<>();
+        this.imagepath=null;
     }
 
-    public Album(int id, String name, Bitmap bitmap, String author, Date date) {
-        this.id = id;
-        this.name = name;
-        this.imageBitmap = bitmap;
-        this.artistname = author;
-        this.date = date;
-        this.consons_Album= new ArrayList<>();
-    }
 
     public Album() {}
 
-    public Album(int id, String name, String artistname, long timeStamp, byte[] fromBitmap) {
-        this.id = id;
-        this.name = name;
-        this.artistname = artistname;
-        this.timeStamp = timeStamp;
-        this.fromBitmap = fromBitmap;
+
+    public Album(String string, Bitmap bitmap,String imagepath, String string1, Date date) {
+        this.name = string;
+        this.artistname = string1;
+        this.date = date;
+        this.imagepath=imagepath;
+        this.imageBitmap = bitmap;
+        this.consons_Album= new ArrayList<>();
+        this.ImageUrl= null;
     }
 
-    public Album(String name, String artistname, long timeStamp, byte[] fromBitmap) {
-        this.name = name;
-        this.artistname = artistname;
-        this.timeStamp = timeStamp;
-        this.fromBitmap = fromBitmap;
+
+    public Album(Integer id,String string, Bitmap bitmap,String imagepath,String imageUrl, String string1, Date date, String date_string) {
+        this.id=id;
+        this.name = string;
+        this.artistname = string1;
+        this.date = date;
+        this.imagepath=imagepath;
+        this.imageBitmap = bitmap;
+        this.consons_Album= new ArrayList<>();
+        this.ImageUrl= null;
+        this.ImageUrl= imageUrl;
     }
+
+
+
+
 
     //#endregion
 
     //#region Getters i Setters
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -204,6 +216,7 @@ public class Album implements Serializable {
     public void setImageBitmap(Bitmap imageBitmap) {
         this.imageBitmap = imageBitmap;
         this.ImageUrl = null;
+
     }
 
     public List<Song> getConsons_Album() {
@@ -222,22 +235,6 @@ public class Album implements Serializable {
         this.selected = selected;
     }
 
-    public long getTimeStamp() {
-        return timeStamp;
-    }
-
-    public void setTimeStamp(long timeStamp) {
-        this.timeStamp = timeStamp;
-    }
-
-    public byte[] getFromBitmap() {
-        return fromBitmap;
-    }
-
-    public void setFromBitmap(byte[] fromBitmap) {
-        this.fromBitmap = fromBitmap;
-    }
-
     public Songs getLlista_cansons() {
         return llista_cansons;
     }
@@ -246,6 +243,21 @@ public class Album implements Serializable {
         this.llista_cansons = llista_cansons;
     }
 
+    public String getImagepath() {
+        return imagepath;
+    }
+
+    public void setImagepath(String imagepath) {
+        this.imagepath = imagepath;
+    }
+
+    public boolean isDownload() {
+        return download;
+    }
+
+    public void setDownload(boolean download) {
+        this.download = download;
+    }
 
     //#endregion
 
@@ -258,12 +270,12 @@ public class Album implements Serializable {
         if(list_albums==null){
 
             list_albums = new ArrayList<>();
-            list_albums.add(new Album(0,"21", "https://i1.sndcdn.com/artworks-000168814903-4vrfjc-t500x500.jpg","Adele", DateUtils.parseDayMonthYear("21/07/2003")));
-            list_albums.add(new Album(1,"Greatest Hits", "https://i1.sndcdn.com/artworks-0594d6b29566c9686580e8d3560d253d1bc868d3-0-t500x500.jpg","Queen",DateUtils.parseDayMonthYear("08/09/2014")));
-            list_albums.add(new Album(2,"Dancing Queen", "https://i1.sndcdn.com/artworks-HklzvIa2mO1dlBcF-OXKJqw-t500x500.jpg","ABBA",DateUtils.parseDayMonthYear("21/07/2003")));
-            list_albums.add(new Album(3,"Coinicidir", "https://i1.sndcdn.com/artworks-suT8zKas8erE-0-t500x500.jpg","Macaco",DateUtils.parseDayMonthYear("21/07/2003")));
-            list_albums.add(new Album(4,"Semells Like Teen Spirit", "https://i1.sndcdn.com/artworks-gojRubnOqDOn-0-t500x500.jpg","Nirvana",DateUtils.parseDayMonthYear("21/07/2003")));
-            list_albums.add(new Album(5,"Life is Strange Soundtrack", "https://i1.sndcdn.com/artworks-000130535674-a4utz2-t500x500.jpg","Dolkins",DateUtils.parseDayMonthYear("21/07/2003")));
+            list_albums.add(new Album("21", "https://i1.sndcdn.com/artworks-000168814903-4vrfjc-t500x500.jpg","Adele", DateUtils.parseDayMonthYear("21/07/2003")));
+            list_albums.add(new Album("Greatest Hits", "https://i1.sndcdn.com/artworks-0594d6b29566c9686580e8d3560d253d1bc868d3-0-t500x500.jpg","Queen",DateUtils.parseDayMonthYear("08/09/2014")));
+            list_albums.add(new Album("Dancing Queen", "https://i1.sndcdn.com/artworks-HklzvIa2mO1dlBcF-OXKJqw-t500x500.jpg","ABBA",DateUtils.parseDayMonthYear("21/07/2003")));
+            list_albums.add(new Album("Coinicidir", "https://i1.sndcdn.com/artworks-suT8zKas8erE-0-t500x500.jpg","Macaco",DateUtils.parseDayMonthYear("21/07/2003")));
+            list_albums.add(new Album("Semells Like Teen Spirit", "https://i1.sndcdn.com/artworks-gojRubnOqDOn-0-t500x500.jpg","Nirvana",DateUtils.parseDayMonthYear("21/07/2003")));
+            list_albums.add(new Album("Life is Strange Soundtrack", "https://i1.sndcdn.com/artworks-000130535674-a4utz2-t500x500.jpg","Dolkins",DateUtils.parseDayMonthYear("21/07/2003")));
 
 
             return list_albums;
@@ -274,15 +286,6 @@ public class Album implements Serializable {
 
     }
 
-
-    //Retorna un nou id per la creació de un album
-    public static int getNewId(){
-
-        Album last = list_albums.get(list_albums.size()-1);
-
-        return last.getId()+1;
-
-    }
 
 
     //Retorna un nou id per la creació de una canço
@@ -343,7 +346,7 @@ public class Album implements Serializable {
 
                 if(a !=null) {
 
-                    int id = getAlbumPosition(a);
+                    long id = getAlbumPosition(a);
                     if (n.getId() == id) {
                         return false;
                     }
@@ -359,7 +362,7 @@ public class Album implements Serializable {
     }
 
     //Retorna la posicio del album que coincideixi amb el nom del album passat per parametre
-    public static int getAlbumPosition(Album entrada) {
+    public static long getAlbumPosition(Album entrada) {
         for (int i = 0; i < list_albums.size(); i++) {
             Album album = list_albums.get(i);
 

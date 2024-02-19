@@ -1,6 +1,7 @@
 package com.example.spotify.Adapters;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import com.example.spotify.ViewModel.AlbumInfoViewModel;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+
+import java.io.File;
 import java.util.List;
 
 import com.example.spotify.model.AlbumClickerListener;
@@ -32,11 +35,10 @@ public class Album_Adapter extends RecyclerView.Adapter<Album_Adapter.ViewHolder
 
 
     //#region Constructor
-    public Album_Adapter(List<Album> albums, MyMusic a, AlbumClickerListener listener, AlbumInfoViewModel viewModel) {
+    public Album_Adapter(List<Album> albums, MyMusic a, AlbumClickerListener listener) {
         this.albums = albums;
         context=a;
         this.listener=listener;
-        this.viewModel=viewModel;
     }
     //#endregion
 
@@ -55,12 +57,36 @@ public class Album_Adapter extends RecyclerView.Adapter<Album_Adapter.ViewHolder
         //Configurem la info del item que anem a mostrar
         holder.titlealbum.setText(a.getName());
         holder.authoralbum.setText(a.getArtistname());
-        holder.datealbum.setText(DateUtils.formatDateToDayMonthYear(a.getDate()));
-        holder.numsongs.setText(String.valueOf(a.getConsons_Album().size()));
+
+
+        if(a.getDate()!=null){
+            holder.datealbum.setText(DateUtils.formatDateToDayMonthYear(a.getDate()));
+        }else{
+            holder.datealbum.setVisibility(View.INVISIBLE);
+        }
+
+
+
+
+        if(a.getConsons_Album()==null){
+            holder.numsongs.setText("0");
+        }else{
+            holder.numsongs.setText(String.valueOf(a.getConsons_Album().size()));
+        }
+
 
 
 
         //#region ImageLoader
+
+        if(a.getImagepath()!=null){
+            File file = new File(a.getImagepath());
+            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+
+            a.setImageBitmap(bitmap);
+            holder.imgalbum.setImageBitmap(bitmap);
+        }
+
 
         if(a.getImageBitmap()!=null){
 
@@ -81,8 +107,6 @@ public class Album_Adapter extends RecyclerView.Adapter<Album_Adapter.ViewHolder
             //#endregion
 
         }else{
-
-
 
             //Imatge per defecte del imageview
             holder.imgalbum.setImageResource(R.drawable.loading);
@@ -107,10 +131,18 @@ public class Album_Adapter extends RecyclerView.Adapter<Album_Adapter.ViewHolder
 
 
                     //Si s'ha pogut completar la cerca de la imatge, la establim com imatge del imageview
-                    a.setImageBitmap(loadedImage);
-                    holder.imgalbum.setImageBitmap(loadedImage);
 
-                    viewModel.insert(a);
+
+                    if(loadedImage!= null){
+                        a.setImageBitmap(loadedImage);
+                        holder.imgalbum.setImageBitmap(loadedImage);
+                    }else{
+                        holder.imgalbum.setImageResource(R.drawable.not_found);
+                    }
+
+
+
+
 
                 }
 
@@ -122,6 +154,8 @@ public class Album_Adapter extends RecyclerView.Adapter<Album_Adapter.ViewHolder
             });
 
         }
+
+
         //#endregion
 
 

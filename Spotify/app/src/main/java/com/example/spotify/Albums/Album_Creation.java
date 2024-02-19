@@ -11,11 +11,14 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +26,7 @@ import android.widget.DatePicker;
 
 import com.example.spotify.R;
 import com.example.spotify.Songs.llista_cansons;
+import com.example.spotify.ViewModel.AlbumInfoViewModel;
 import com.example.spotify.databinding.FragmentAlbumCreationBinding;
 import com.example.spotify.dialogs.Custom_Dialog_Image_Picker;
 
@@ -32,6 +36,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
+import java.util.List;
 
 import com.example.spotify.model.classes.Album;
 import com.example.spotify.model.formatters.DateUtils;
@@ -42,6 +47,8 @@ public class Album_Creation extends Fragment implements Custom_Dialog_Image_Pick
     DatePickerDialog picker;
 
     Custom_Dialog_Image_Picker customDialog;
+
+    AlbumInfoViewModel viewModel;
 
     String pathImage;
 
@@ -56,6 +63,8 @@ public class Album_Creation extends Fragment implements Custom_Dialog_Image_Pick
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        viewModel = new ViewModelProvider(requireActivity()).get(AlbumInfoViewModel.class);
 
     }
 
@@ -131,7 +140,10 @@ public class Album_Creation extends Fragment implements Custom_Dialog_Image_Pick
                         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.music_creation);
                     }
 
-                    Album nou = new Album(Album.getNewId(), b.edtAlbumTitle.getText().toString(), bitmap, b.edtAuthorName.getText().toString(), DateUtils.parseDayMonthYear(b.editText.getText().toString()));
+                    Album nou = new Album(b.edtAlbumTitle.getText().toString(), bitmap,pathImage, b.edtAuthorName.getText().toString(), DateUtils.parseDayMonthYear(b.editText.getText().toString()));
+                    nou.setDownload(false);
+                    viewModel.insert(nou);
+
 
                     Album.list_albums.add(nou);
 
@@ -150,6 +162,7 @@ public class Album_Creation extends Fragment implements Custom_Dialog_Image_Pick
 
 
                     MyMusic.adapter.notifyDataSetChanged();
+
 
 
                 }else{
@@ -192,6 +205,7 @@ public class Album_Creation extends Fragment implements Custom_Dialog_Image_Pick
                     AlertDialog dialog = builder.create();
                     dialog.show();
 
+                    viewModel.update(Album.list_albums.get(posicio));
 
 
                     MyMusic.adapter.notifyDataSetChanged();

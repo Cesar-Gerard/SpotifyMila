@@ -65,6 +65,7 @@ public class Download_Albums extends Fragment {
         viewModel.setLlista(groupedAlbums);
         viewModelArtist.setLlista(resultArtist);
 
+        binding.EditTextCerca.setText("");
 
         //Preparem la api
         manager = LastFMManager.getInstance();
