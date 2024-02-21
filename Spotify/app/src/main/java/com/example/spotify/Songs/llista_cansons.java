@@ -6,11 +6,13 @@ import android.os.Bundle;
 import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +23,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.example.spotify.R;
+import com.example.spotify.ViewModel.SongViewMode;
 import com.example.spotify.databinding.FragmentLlistaCansonsBinding;
 import com.example.spotify.dialogs.Song_Creation_CustomDialog;
 import com.example.spotify.dialogs.delete_album_custom_dialog;
@@ -45,6 +48,7 @@ public class llista_cansons extends Fragment  {
 
 
     static AlbumInfoViewModel viewModel;
+    static SongViewMode viewSong;
 
     public static Song_Adapter adapter;
 
@@ -86,6 +90,7 @@ public class llista_cansons extends Fragment  {
         super.onCreate(savedInstanceState);
 
         viewModel = new ViewModelProvider(requireActivity()).get(AlbumInfoViewModel.class);
+        viewSong= new ViewModelProvider(requireActivity()).get(SongViewMode.class);
 
     }
 
@@ -96,18 +101,34 @@ public class llista_cansons extends Fragment  {
         View v = b.getRoot();
 
         if(entrada!=null){
-            setUpAlbumInfo();
-            setUpAnimations();
 
-            setUpRecycleViewCansons();
 
-            setUpFloatingButton();
+            LiveData<List<Song>> songs =  viewModel.getSongs(entrada.getId());
+            songs.observe(getActivity(),lessongs -> {
+                        Log.d("XXX", "song:"+lessongs);
+                        viewSong.setLlista(lessongs);
+                        entrada.setConsons_Album(viewSong.getllistaSongs().getValue());
 
-            setUpActionBar();
+                        setUpAlbumInfo();
+                        setUpAnimations();
+
+                        setUpRecycleViewCansons();
+
+                        setUpFloatingButton();
+
+                        setUpActionBar();
+
+
+            }
+            );
+
+
+
+
+
+
 
         }
-
-
 
 
         return v;
@@ -188,7 +209,7 @@ public class llista_cansons extends Fragment  {
         for (Song item : entrada.getConsons_Album()) {
             if (item.isSelected()) {
                 selectedItems.add(item);
-                posicio = item.getId();
+                posicio = (int)item.getId();
             }
         }
 
@@ -199,7 +220,7 @@ public class llista_cansons extends Fragment  {
         for(int i =posicio; i < entrada.getConsons_Album().size(); i++ ){
             Song j = entrada.getConsons_Album().get(i);
 
-            entrada.getConsons_Album().get(i).setId(j.getId()-1);
+            entrada.getConsons_Album().get(i).setId((int) j.getId()-1);
         }
 
         int p = Album.list_albums.indexOf(entrada);

@@ -8,6 +8,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.spotify.model.classes.Album;
+import com.example.spotify.model.classes.Song;
 
 import java.util.List;
 
@@ -17,8 +18,16 @@ public interface AlbumDao {
     @Query("SELECT * FROM album")
     LiveData<List<Album>> getAll();
 
+    @Query("SELECT * FROM song WHERE albumId = :entrada")
+    LiveData<List<Song>> getSongByAlbum(long entrada);
+
+
     @Insert
     long insert(Album album);
+
+
+    @Insert
+    long insertSong(Song song);
 
     @Update
     void update(Album a);
@@ -27,4 +36,6 @@ public interface AlbumDao {
     void delete(Album album);
 
 
+    @Delete
+    void deleteSong(Song entrada);
 }

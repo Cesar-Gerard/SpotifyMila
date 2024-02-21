@@ -161,14 +161,7 @@ public class Download_Albums extends Fragment {
 
                     });
 
-
-
-
                 }
-
-
-
-
 
             }
 

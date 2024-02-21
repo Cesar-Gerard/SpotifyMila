@@ -108,7 +108,7 @@ public class Song_Creation_CustomDialog extends DialogFragment {
 
         b.numberPickerMinutos.setValue(FormatTime.formatStringToInt(minuts));
         b.numberPickerSegundos.setValue(FormatTime.formatStringToInt(segons));
-        b.pickerid.setValue(canso.getId());
+        b.pickerid.setValue((int)canso.getId());
 
     }
 
@@ -193,9 +193,9 @@ public class Song_Creation_CustomDialog extends DialogFragment {
 
                     String time = FormatTime.formatIntToString(b.numberPickerMinutos.getValue()) + ":" + FormatTime.formatIntToString(b.numberPickerSegundos.getValue());
 
-                    Song nou = new Song(id, fav, name, time);
+                  //  Song nou = new Song(id, fav, name, time);
 
-                    Album.addNewSong(nou, llista_cansons.entrada);
+                  //  Album.addNewSong(nou, llista_cansons.entrada);
 
 
                     llista_cansons.adapter.notifyDataSetChanged();
@@ -213,12 +213,12 @@ public class Song_Creation_CustomDialog extends DialogFragment {
 
 
 
-                    llista_cansons.entrada.getConsons_Album().get(canso.getId()).setName(b.edtNameSong.getText().toString());
-                    llista_cansons.entrada.getConsons_Album().get(canso.getId()).setSelected(false);
+                    llista_cansons.entrada.getConsons_Album().get((int)canso.getId()).setName(b.edtNameSong.getText().toString());
+                    llista_cansons.entrada.getConsons_Album().get((int)canso.getId()).setSelected(false);
 
                     String time = FormatTime.formatIntToString(b.numberPickerMinutos.getValue()) + ":" + FormatTime.formatIntToString(b.numberPickerSegundos.getValue());
 
-                    llista_cansons.entrada.getConsons_Album().get(canso.getId()).setTime(time);
+                    llista_cansons.entrada.getConsons_Album().get((int)canso.getId()).setTime(time);
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setMessage("Canço actualitzada")

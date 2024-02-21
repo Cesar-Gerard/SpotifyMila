@@ -27,14 +27,17 @@ import com.example.spotify.API.LastFMManager;
 import com.example.spotify.Adapters.Image_Album_adapter;
 import com.example.spotify.dialogs.download_album_customDialog;
 import com.example.spotify.model.classes.Album;
+import com.example.spotify.model.classes.Song;
 import com.example.spotify.model.formatters.BitmapUtils;
 import com.example.spotify.modelApi.InfoApi.InfoArtist;
+import com.example.spotify.modelApi.SongsAlbum.SongsAlbum;
 import com.example.spotify.modelApi.TopAlbums.SearchTopAlbums;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,6 +51,10 @@ public class InsideArtist extends Fragment {
     Image_Album_adapter adapter;
 
     InsideAlbumViewModel viewModel;
+
+    static Album descarregat;
+
+    private static long id_album;
 
     static AlbumInfoViewModel viewAlbum;
 
@@ -229,37 +236,41 @@ public class InsideArtist extends Fragment {
 
 
     public static void downloadItemSelected(Context context) {
-
-
-
         // Itera sobre musicList para identificar elementos seleccionados
         for (Album item : albums) {
             if (item.isSelected()) {
-
                     item.setDownload(true);
-                    item.setId(Album.list_albums.size());
-                    item.setId(item.getId() + 1);
                     item.setDate(null);
                     item.setImageBitmap(item.getImage().get(1).getImageBitmap());
                     File guardar = BitmapUtils.saveBitmapToGallery(item.getImageBitmap(), item);
                     if (guardar != null) {
                         item.setImagepath(BitmapUtils.getFilePath(guardar));
                     }
-                    viewAlbum.insert(item);
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setMessage("Album descarregat")
-                            .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
+                    viewAlbum.insert(item).observeOn(Schedulers.io())
+                            .subscribe(id -> {
+                                id_album=id;
 
-                                }
+                            }, throwable -> {
+                                Log.e("Error", "Error al insertar el album", throwable);
                             });
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
+                    item.setSelected(false);
+                    descarregat=item;
+
+
 
             }
         }
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("Album descarregat")
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
 
 
 
@@ -287,6 +298,33 @@ public class InsideArtist extends Fragment {
         if (adapter != null) {
             adapter.hideLoading();
         }
+    }
+
+
+    public static void downloadSongAlbum() {
+
+        LastFMManager.getInstance().getSongs(descarregat.getArtistname(), descarregat.getName(), new Callback<SongsAlbum>() {
+            @Override
+            public void onResponse(Call<SongsAlbum> call, Response<SongsAlbum> response) {
+
+                if(response!=null) {
+
+                    for (Song canso : response.body().getAlbum().getLlista_cansons().getTrack()) {
+                        canso.setAlbum_id(id_album);
+                        canso.convertTime(canso.getTime_original());
+                        viewAlbum.insertSong(canso);
+
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<SongsAlbum> call, Throwable t) {
+
+            }
+        });
+
     }
 
 

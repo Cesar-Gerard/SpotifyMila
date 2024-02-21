@@ -102,8 +102,14 @@ public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapte
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    itemTop.setSelected(true);
-                    ((AppCompatActivity)inside.getContext()).startSupportActionMode(inside.actionModeCallback);
+
+                    if(itemTop.isSelected()){
+                        itemTop.setSelected(false);
+                    }else if(!itemTop.isSelected()){
+                        itemTop.setSelected(true);
+                        ((AppCompatActivity)inside.getContext()).startSupportActionMode(inside.actionModeCallback);
+                    }
+
 
 
 

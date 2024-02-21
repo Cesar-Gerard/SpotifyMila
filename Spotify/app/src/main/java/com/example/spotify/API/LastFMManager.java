@@ -62,10 +62,11 @@ public class LastFMManager {
         call.enqueue(callback);
     }
 
-    public void getSongs (String artista,String album, Callback<SongsAlbum> callback){
-        Call<SongsAlbum> call = mApiService.getSongs("album.getinfo",TOKEN,artista,album, FORMAT);
+    public void getSongs (String artista,String album,Callback<SongsAlbum> callback){
+        Call<SongsAlbum> call = mApiService.getSongsAlbum("album.getinfo",TOKEN,artista,album, FORMAT);
         call.enqueue(callback);
     }
+
 
 
 }

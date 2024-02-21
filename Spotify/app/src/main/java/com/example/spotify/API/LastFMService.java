@@ -48,13 +48,14 @@ public interface LastFMService {
     );
 
     @GET("/2.0/")
-    Call<SongsAlbum> getSongs(
+    Call<SongsAlbum> getSongsAlbum(
             @Query("method") String method,
             @Query("api_key") String apiKey,
             @Query("artist") String artist,
             @Query("album") String album,
             @Query("format") String format
     );
+
 
 
 }

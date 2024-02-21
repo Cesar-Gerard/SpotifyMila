@@ -1,13 +1,14 @@
 package com.example.spotify.model.classes;
 
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 import javax.annotation.processing.Generated;
 
 @Generated("jsonschema2pojo")
-public class Songs {
+public class Tracks {
 
     @SerializedName("track")
     @Expose
@@ -20,6 +21,5 @@ public class Songs {
     public void setTrack(List<Song> track) {
         this.track = track;
     }
-
 }
 

@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.example.spotify.MainActivity;
-import com.example.spotify.model.formatters.BitmapUtils;
 import com.example.spotify.model.formatters.DateUtils;
 import com.example.spotify.modelApi.AlbumApi.Image;
 import com.example.spotify.modelApi.ArtistApi.Artist;
@@ -65,10 +63,11 @@ public class Album implements Serializable {
     @Ignore
     boolean selected;
 
+
     @SerializedName("tracks")
     @Expose
     @Ignore
-    private Songs llista_cansons;
+    private Tracks llista_cansons;
 
     @Ignore
      List<Song> consons_Album;
@@ -235,11 +234,11 @@ public class Album implements Serializable {
         this.selected = selected;
     }
 
-    public Songs getLlista_cansons() {
+    public Tracks getLlista_cansons() {
         return llista_cansons;
     }
 
-    public void setLlista_cansons(Songs llista_cansons) {
+    public void setLlista_cansons(Tracks llista_cansons) {
         this.llista_cansons = llista_cansons;
     }
 
@@ -294,7 +293,7 @@ public class Album implements Serializable {
 
             Song last = this.consons_Album.get(consons_Album.size() - 1);
 
-            return last.getId() + 1;
+            return (int) last.getId() + 1;
         }else{
             return 0;
         }
@@ -382,7 +381,7 @@ public class Album implements Serializable {
                 Song song = a.getConsons_Album().get(i);
 
                 if (song.getName().equals(entrada.getName())) {
-                    return song.getId();
+                    return (int) song.getId();
                 }
             }
             return -1;

@@ -2,6 +2,7 @@ package com.example.spotify.ViewModel;
 
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -12,6 +13,7 @@ import androidx.room.Room;
 import com.example.spotify.DataBase.AlbumDao;
 import com.example.spotify.DataBase.AppDatabase;
 import com.example.spotify.model.classes.Album;
+import com.example.spotify.model.classes.Song;
 
 
 import java.util.List;
@@ -49,14 +51,27 @@ public class AlbumInfoViewModel extends AndroidViewModel {
         return  userDao.getAll();
     }
 
+    public LiveData<List<Song>> getSongs(long id){
+        AlbumDao userDao = db.albumDao();
+        return  userDao.getSongByAlbum(id);
+    }
 
-    public void insert(Album u) {
+    public Observable<Long> insert(Album u) {
+        return Observable.fromCallable(() -> {
+            AlbumDao userDao = db.albumDao();
+            long id = userDao.insert(u);
+            insertFet.postValue(true); // No estoy seguro de lo que hace esto, pero lo dejé como estaba
+            return id;
+        }).subscribeOn(Schedulers.io());
+    }
+
+
+    public void insertSong(Song u) {
 
         Observable.fromCallable(() -> {
 
             AlbumDao userDao = db.albumDao();
-            u.setId(userDao.insert(u));
-            insertFet.postValue(true);
+            u.setId(userDao.insertSong(u));
             return true;
         }).subscribeOn(Schedulers.io()).subscribe();
 
@@ -73,6 +88,14 @@ public class AlbumInfoViewModel extends AndroidViewModel {
         }).subscribeOn(Schedulers.io()).subscribe();
     }
 
+    public void deleteSongs(Song entrada){
+        Observable.fromCallable(() -> {
+            AlbumDao userDao = db.albumDao();
+            userDao.deleteSong(entrada);
+            return true;
+        }).subscribeOn(Schedulers.io()).subscribe();
+    }
+
 
     public void update(Album u){
         Observable.fromCallable(() -> {
@@ -81,6 +104,5 @@ public class AlbumInfoViewModel extends AndroidViewModel {
             return true;
         }).subscribeOn(Schedulers.io()).subscribe();
     }
-
 
 }
