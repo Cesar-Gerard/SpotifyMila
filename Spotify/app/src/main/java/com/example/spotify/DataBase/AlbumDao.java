@@ -32,10 +32,19 @@ public interface AlbumDao {
     @Update
     void update(Album a);
 
+    @Update
+    void updateSong(Song a);
+
     @Delete
     void delete(Album album);
 
 
+
     @Delete
     void deleteSong(Song entrada);
+
+
+
+    @Query("DELETE FROM song WHERE song.albumId = (:entrada)  ")
+    void deleteSongByAlbum(long entrada);
 }

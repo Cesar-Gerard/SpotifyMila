@@ -7,6 +7,9 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.text.DecimalFormat;
+
 @Entity
 public class Song {
 
@@ -31,6 +34,8 @@ public class Song {
     @ColumnInfo(name = "songDuration")
     String time;
 
+    @ColumnInfo(name = "songposition")
+    int posicio;
 
 
     @SerializedName("duration")
@@ -41,13 +46,24 @@ public class Song {
 
 
 
-    public Song(long id, long album_id, boolean like, String name, String time) {
+    public Song(long id, long album_id, boolean like, String name, String time, int posicio) {
         this.id = id;
         this.album_id = album_id;
         this.like = like;
         this.name = name;
         this.time = time;
+        this.posicio=posicio;
     }
+
+    @Ignore
+    public Song(long album_id, boolean like, String name, String time, int posicio) {
+        this.album_id = album_id;
+        this.like = like;
+        this.name = name;
+        this.time = time;
+        this.posicio=posicio;
+    }
+
 
 
     //#region Getters i Setters
@@ -109,14 +125,44 @@ public class Song {
     }
 
     public void convertTime(Integer timeOriginal) {
-
-        if(timeOriginal!=null) {
+        if (timeOriginal != null) {
             int minutos = timeOriginal / 60;
             int segundos = timeOriginal % 60;
-            this.time = minutos + ":" + segundos;
-        }else{
-            this.time = "00" + ":" + "00";
+            // Formatear los segundos para asegurar que siempre sean dos dígitos
+            DecimalFormat df = new DecimalFormat("00");
+            this.time = minutos + ":" + df.format(segundos);
+        } else {
+            this.time = "00:00";
         }
+    }
+
+    public int convertToSeconds(String timeString) {
+        if (timeString != null && timeString.matches("\\d{1,2}:\\d{2}")) {
+            String[] partes = timeString.split(":");
+            int minutos = Integer.parseInt(partes[0]);
+            int segundos = Integer.parseInt(partes[1]);
+            return minutos * 60 + segundos;
+        } else {
+            return 0;
+        }
+    }
+
+    public int convertToMinutes(String timeString) {
+        if (timeString != null && timeString.matches("\\d{1,2}:\\d{2}")) {
+            String[] partes = timeString.split(":");
+            int minutos = Integer.parseInt(partes[0]);
+            return minutos;
+        } else {
+            return 0;
+        }
+    }
+
+    public int getPosicio() {
+        return posicio;
+    }
+
+    public void setPosicio(int posicio) {
+        this.posicio = posicio;
     }
 
     //#endregion

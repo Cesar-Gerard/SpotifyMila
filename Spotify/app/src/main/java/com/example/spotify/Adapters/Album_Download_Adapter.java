@@ -134,7 +134,7 @@ public class Album_Download_Adapter extends RecyclerView.Adapter<Album_Download_
                 notifyDataSetChanged();
                 hideLoading();
             }
-        }, 0); // Ajusta este valor al tiempo real que tome cargar los datos
+        }, 1); // Ajusta este valor al tiempo real que tome cargar los datos
     }
 
 

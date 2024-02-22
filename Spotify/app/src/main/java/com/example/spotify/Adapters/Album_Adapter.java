@@ -2,6 +2,7 @@ package com.example.spotify.Adapters;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.spotify.Albums.MyMusic;
 import com.example.spotify.R;
 import com.example.spotify.ViewModel.AlbumInfoViewModel;
+import com.example.spotify.ViewModel.SongViewMode;
+import com.example.spotify.model.classes.Song;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -33,11 +38,15 @@ public class Album_Adapter extends RecyclerView.Adapter<Album_Adapter.ViewHolder
 
     AlbumInfoViewModel viewModel;
 
+    SongViewMode viewSong;
+
 
     //#region Constructor
     public Album_Adapter(List<Album> albums, MyMusic a, AlbumClickerListener listener) {
         this.albums = albums;
         context=a;
+        viewModel= new ViewModelProvider(context.requireActivity()).get(AlbumInfoViewModel.class);
+        viewSong= new ViewModelProvider(context.requireActivity()).get(SongViewMode.class);
         this.listener=listener;
     }
     //#endregion
@@ -59,26 +68,53 @@ public class Album_Adapter extends RecyclerView.Adapter<Album_Adapter.ViewHolder
         holder.authoralbum.setText(a.getArtistname());
 
 
-        if(a.getDate()!=null){
-            holder.datealbum.setText(DateUtils.formatDateToDayMonthYear(a.getDate()));
-        }else{
-            holder.datealbum.setVisibility(View.INVISIBLE);
+
+        LiveData<List<Song>> songs =  viewModel.getSongs(a.getId());
+        songs.observe(context.getActivity(),lessongs -> {
+                    Log.d("XXX", "song:"+lessongs);
+                    viewSong.setLlista(lessongs);
+
+                    a.setConsons_Album(viewSong.getllistaSongs().getValue());
+
+                    InfoAlbum(holder, a);
+                    ImageLoader(holder, a);
+                    ClickEvents(holder, a);
+
         }
+        );
 
 
 
 
-        if(a.getConsons_Album()==null){
-            holder.numsongs.setText("0");
-        }else{
-            holder.numsongs.setText(String.valueOf(a.getConsons_Album().size()));
-        }
+
+    }
+
+    private void ClickEvents(@NonNull ViewHolder holder, Album a) {
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                //Enllaç de la ContextualActionBar amb el seu equivalent de
+                a.setSelected(true);
+                ((AppCompatActivity)context.getContext()).startSupportActionMode(context.actionModeCallback);
+
+                return true;
+            }
+
+        });
 
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.AlbumClicked(a);
+
+            }
 
 
-        //#region ImageLoader
+        });
+    }
 
+    private void ImageLoader(@NonNull ViewHolder holder, Album a) {
         if(a.getImagepath()!=null){
             File file = new File(a.getImagepath());
             Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
@@ -154,45 +190,22 @@ public class Album_Adapter extends RecyclerView.Adapter<Album_Adapter.ViewHolder
             });
 
         }
-
-
-        //#endregion
-
-
-        //#region clickListeners
-
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                //Enllaç de la ContextualActionBar amb el seu equivalent de
-                a.setSelected(true);
-                ((AppCompatActivity)context.getContext()).startSupportActionMode(context.actionModeCallback);
-
-                return true;
-            }
-
-        });
-
-
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.AlbumClicked(a);
-
-            }
-
-
-        });
-
-
-        //#endregion
-
-
-
     }
 
+    private static void InfoAlbum(@NonNull ViewHolder holder, Album a) {
+        if(a.getDate()!=null){
+            holder.datealbum.setText(DateUtils.formatDateToDayMonthYear(a.getDate()));
+        }else{
+            holder.datealbum.setVisibility(View.INVISIBLE);
+        }
 
+
+        if(a.getConsons_Album()==null){
+            holder.numsongs.setText("0");
+        }else{
+            holder.numsongs.setText(String.valueOf(a.getConsons_Album().size()));
+        }
+    }
 
 
     @Override

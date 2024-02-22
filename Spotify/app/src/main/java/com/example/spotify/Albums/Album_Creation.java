@@ -41,6 +41,8 @@ import java.util.List;
 import com.example.spotify.model.classes.Album;
 import com.example.spotify.model.formatters.DateUtils;
 
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class Album_Creation extends Fragment implements Custom_Dialog_Image_Picker.OnImageSelectedListener {
 
     FragmentAlbumCreationBinding b;
@@ -49,6 +51,8 @@ public class Album_Creation extends Fragment implements Custom_Dialog_Image_Pick
     Custom_Dialog_Image_Picker customDialog;
 
     AlbumInfoViewModel viewModel;
+
+    private static long id_album;
 
     String pathImage;
 
@@ -142,9 +146,17 @@ public class Album_Creation extends Fragment implements Custom_Dialog_Image_Pick
 
                     Album nou = new Album(b.edtAlbumTitle.getText().toString(), bitmap,pathImage, b.edtAuthorName.getText().toString(), DateUtils.parseDayMonthYear(b.editText.getText().toString()));
                     nou.setDownload(false);
-                    viewModel.insert(nou);
 
 
+                    viewModel.insert(nou).observeOn(Schedulers.io())
+                            .subscribe(id -> {
+                                id_album=id;
+
+                            }, throwable -> {
+                                Log.e("Error", "Error al insertar el album", throwable);
+                            });
+
+                    nou.setId(id_album);
                     Album.list_albums.add(nou);
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -161,7 +173,8 @@ public class Album_Creation extends Fragment implements Custom_Dialog_Image_Pick
                     dialog.show();
 
 
-                    MyMusic.adapter.notifyDataSetChanged();
+
+                    entrada=null;
 
 
 
@@ -176,6 +189,7 @@ public class Album_Creation extends Fragment implements Custom_Dialog_Image_Pick
                     Album.list_albums.get(posicio).setDate(DateUtils.parseDayMonthYear(b.editText.getText().toString()));
 
                     Bitmap bitmap = BitmapFactory.decodeFile(pathImage);
+                    Album.list_albums.get(posicio).setImagepath(pathImage);
 
                     float scale = Album_Creation.this.getContext().getResources().getDisplayMetrics().density;
 

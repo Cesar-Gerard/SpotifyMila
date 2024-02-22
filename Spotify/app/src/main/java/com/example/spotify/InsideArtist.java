@@ -307,13 +307,20 @@ public class InsideArtist extends Fragment {
             @Override
             public void onResponse(Call<SongsAlbum> call, Response<SongsAlbum> response) {
 
-                if(response!=null) {
+                if(response.body()!=null) {
 
-                    for (Song canso : response.body().getAlbum().getLlista_cansons().getTrack()) {
-                        canso.setAlbum_id(id_album);
-                        canso.convertTime(canso.getTime_original());
-                        viewAlbum.insertSong(canso);
+                    if(response.body().getAlbum().getLlista_cansons().getTrack()!=null) {
 
+                        int posicio = 0;
+
+
+                        for (Song canso : response.body().getAlbum().getLlista_cansons().getTrack()) {
+                            canso.setAlbum_id(id_album);
+                            canso.setPosicio(posicio);
+                            canso.convertTime(canso.getTime_original());
+                            viewAlbum.insertSong(canso);
+                            posicio++;
+                        }
                     }
                 }
 

@@ -60,7 +60,7 @@ public class AlbumInfoViewModel extends AndroidViewModel {
         return Observable.fromCallable(() -> {
             AlbumDao userDao = db.albumDao();
             long id = userDao.insert(u);
-            insertFet.postValue(true); // No estoy seguro de lo que hace esto, pero lo dejé como estaba
+            insertFet.postValue(true);
             return id;
         }).subscribeOn(Schedulers.io());
     }
@@ -84,6 +84,7 @@ public class AlbumInfoViewModel extends AndroidViewModel {
             AlbumDao userDao = db.albumDao();
             userDao.delete(u);
             llistaAlbums.getValue().remove(u);
+            userDao.deleteSongByAlbum(u.getId());
             return true;
         }).subscribeOn(Schedulers.io()).subscribe();
     }
@@ -101,6 +102,15 @@ public class AlbumInfoViewModel extends AndroidViewModel {
         Observable.fromCallable(() -> {
             AlbumDao userDao = db.albumDao();
             userDao.update(u);
+            return true;
+        }).subscribeOn(Schedulers.io()).subscribe();
+    }
+
+
+    public void updateSong(Song u){
+        Observable.fromCallable(() -> {
+            AlbumDao userDao = db.albumDao();
+            userDao.updateSong(u);
             return true;
         }).subscribeOn(Schedulers.io()).subscribe();
     }

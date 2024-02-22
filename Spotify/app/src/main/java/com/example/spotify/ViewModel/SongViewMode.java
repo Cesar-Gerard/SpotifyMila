@@ -17,6 +17,18 @@ public class SongViewMode extends AndroidViewModel {
         super(application);
     }
 
+
+    public long albumId;
+
+
+    public long getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(long albumId) {
+        this.albumId = albumId;
+    }
+
     public MutableLiveData<Boolean> insertFet = new MutableLiveData<>();
 
     private final MutableLiveData<List<Song>> llistaSongs= new MutableLiveData<>();

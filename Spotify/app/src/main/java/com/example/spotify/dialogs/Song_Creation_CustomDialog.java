@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.spotify.ViewModel.SongViewMode;
 import com.example.spotify.databinding.FragmentSongCreationCustomDialogBinding;
 import com.example.spotify.Songs.llista_cansons;
 
@@ -38,6 +39,8 @@ public class Song_Creation_CustomDialog extends DialogFragment {
 
     AlbumInfoViewModel viewModel;
 
+    SongViewMode viewSong;
+
     private Handler handler = new Handler();
     private Runnable inputFinishChecker;
 
@@ -60,6 +63,7 @@ public class Song_Creation_CustomDialog extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         viewModel = new ViewModelProvider(requireActivity()).get(AlbumInfoViewModel.class);
+        viewSong=new ViewModelProvider(requireActivity()).get(SongViewMode.class);
 
 
     }
@@ -89,7 +93,7 @@ public class Song_Creation_CustomDialog extends DialogFragment {
             b.pickerid.setEnabled(true);
             setUpSong();
         }else{
-            b.pickerid.setValue(llista_cansons.entrada.getNewSongId());
+            b.pickerid.setValue(llista_cansons.entrada.getNewSongPosition());
             b.pickerid.setEnabled(false);
         }
 
@@ -103,12 +107,11 @@ public class Song_Creation_CustomDialog extends DialogFragment {
 
         b.edtNameSong.setText(canso.getName());
 
-        String minuts = canso.getTime().toString().substring(0,2);
-        String segons = canso.getTime().toString().substring(3);
 
-        b.numberPickerMinutos.setValue(FormatTime.formatStringToInt(minuts));
-        b.numberPickerSegundos.setValue(FormatTime.formatStringToInt(segons));
-        b.pickerid.setValue((int)canso.getId());
+
+        b.numberPickerMinutos.setValue(canso.convertToMinutes(canso.getTime()));
+        b.numberPickerSegundos.setValue(canso.convertToSeconds(canso.getTime())-3);
+        b.pickerid.setValue(canso.getPosicio());
 
     }
 
@@ -188,15 +191,15 @@ public class Song_Creation_CustomDialog extends DialogFragment {
 
 
                     String name = b.edtNameSong.getText().toString();
-                    int id = llista_cansons.entrada.getNewSongId();
                     boolean fav = false;
 
                     String time = FormatTime.formatIntToString(b.numberPickerMinutos.getValue()) + ":" + FormatTime.formatIntToString(b.numberPickerSegundos.getValue());
 
-                  //  Song nou = new Song(id, fav, name, time);
+                    int position =b.pickerid.getValue();
 
-                  //  Album.addNewSong(nou, llista_cansons.entrada);
+                    Song nou = new Song(viewSong.getAlbumId(), fav, name, time,position);
 
+                    viewModel.insertSong(nou);
 
                     llista_cansons.adapter.notifyDataSetChanged();
 
@@ -213,12 +216,12 @@ public class Song_Creation_CustomDialog extends DialogFragment {
 
 
 
-                    llista_cansons.entrada.getConsons_Album().get((int)canso.getId()).setName(b.edtNameSong.getText().toString());
-                    llista_cansons.entrada.getConsons_Album().get((int)canso.getId()).setSelected(false);
+                    llista_cansons.entrada.getConsons_Album().get(canso.getPosicio()).setName(b.edtNameSong.getText().toString());
+                    llista_cansons.entrada.getConsons_Album().get(canso.getPosicio()).setSelected(false);
 
                     String time = FormatTime.formatIntToString(b.numberPickerMinutos.getValue()) + ":" + FormatTime.formatIntToString(b.numberPickerSegundos.getValue());
 
-                    llista_cansons.entrada.getConsons_Album().get((int)canso.getId()).setTime(time);
+                    llista_cansons.entrada.getConsons_Album().get(canso.getPosicio()).setTime(time);
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setMessage("Canço actualitzada")
@@ -234,11 +237,12 @@ public class Song_Creation_CustomDialog extends DialogFragment {
 
 
 
-                    int id_seleccionat = b.pickerid.getValue();
-                    if(id_seleccionat!= canso.getId()){
-                        intercambiarCancionEnLista(id_seleccionat,canso);
+                    int posicionSelected = b.pickerid.getValue();
+                    if(posicionSelected!= canso.getPosicio()){
+                        intercambiarCancionEnLista(posicionSelected,canso);
                     }
 
+                    viewModel.updateSong(canso);
 
                     canso= null;
 
@@ -298,7 +302,8 @@ public class Song_Creation_CustomDialog extends DialogFragment {
         int max = llista_cansons.entrada.getConsons_Album().size();
         if(max >0){
             if(canso==null) {
-                b.pickerid.setMaxValue(llista_cansons.entrada.getConsons_Album().size());
+                b.pickerid.setMaxValue(max);
+                b.pickerid.setValue(max);
             }else{
                 b.pickerid.setMaxValue(llista_cansons.entrada.getConsons_Album().size()-1);
             }
@@ -317,7 +322,7 @@ public class Song_Creation_CustomDialog extends DialogFragment {
         List<Song> cansons= llista_cansons.entrada.getConsons_Album();
 
         for (Song song : cansons) {
-            if (song.getId() == idSeleccionado) {
+            if (song.getPosicio() == idSeleccionado) {
                 // Intercambiar la posición de la canción modificada con la encontrada en la lista
                 int indiceModificada = cansons.indexOf(cancionModificada);
                 int indiceEncontrada = cansons.indexOf(song);
@@ -328,8 +333,12 @@ public class Song_Creation_CustomDialog extends DialogFragment {
                     cansons.set(indiceEncontrada, cancionModificada);
 
 
-                    song.setId(indiceModificada);
-                    cancionModificada.setId(indiceEncontrada);
+                    song.setPosicio(indiceModificada);
+                    cancionModificada.setPosicio(indiceEncontrada);
+
+                    viewModel.updateSong(song);
+                    viewModel.updateSong(cancionModificada);
+
                 }
                 break;
             }

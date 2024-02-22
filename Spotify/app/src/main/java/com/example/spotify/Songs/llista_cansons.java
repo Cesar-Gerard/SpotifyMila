@@ -29,6 +29,8 @@ import com.example.spotify.dialogs.Song_Creation_CustomDialog;
 import com.example.spotify.dialogs.delete_album_custom_dialog;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.example.spotify.Adapters.Song_Adapter;
@@ -102,11 +104,13 @@ public class llista_cansons extends Fragment  {
 
         if(entrada!=null){
 
+            viewSong.setAlbumId(entrada.getId());
 
             LiveData<List<Song>> songs =  viewModel.getSongs(entrada.getId());
             songs.observe(getActivity(),lessongs -> {
                         Log.d("XXX", "song:"+lessongs);
                         viewSong.setLlista(lessongs);
+
                         entrada.setConsons_Album(viewSong.getllistaSongs().getValue());
 
                         setUpAlbumInfo();
@@ -118,15 +122,8 @@ public class llista_cansons extends Fragment  {
 
                         setUpActionBar();
 
-
             }
             );
-
-
-
-
-
-
 
         }
 
@@ -206,25 +203,43 @@ public class llista_cansons extends Fragment  {
         int posicio = 0;
 
 
-        for (Song item : entrada.getConsons_Album()) {
+        List<Song> cansons= viewSong.getllistaSongs().getValue();
+
+        for (Song item : cansons) {
             if (item.isSelected()) {
                 selectedItems.add(item);
                 posicio = (int)item.getId();
+                viewModel.deleteSongs(item);
+            }
+        }
+
+
+        for(int i =0; i<=cansons.size()-1;i++){
+            if(cansons.get(i).isSelected()){
+                selectedItems.add(cansons.get(i));
+                posicio = (int)cansons.get(i).getPosicio();
+                viewModel.deleteSongs(cansons.get(i));
+                cansons.remove(cansons.get(i));
             }
         }
 
 
 
-        entrada.getConsons_Album().remove(selectedItems.get(selectedItems.size()-1));
+        viewSong.setLlista(cansons);
 
-        for(int i =posicio; i < entrada.getConsons_Album().size(); i++ ){
+        entrada.setConsons_Album(cansons);
+
+        for(int i =posicio; i < cansons.size(); i++ ){
             Song j = entrada.getConsons_Album().get(i);
 
-            entrada.getConsons_Album().get(i).setId((int) j.getId()-1);
+            entrada.getConsons_Album().get(i).setPosicio( j.getPosicio()-1);
+            viewModel.updateSong(j);
         }
 
         int p = Album.list_albums.indexOf(entrada);
 
+
+        viewSong.setLlista(entrada.getConsons_Album());
 
         Album.list_albums.get(p).setConsons_Album(entrada.getConsons_Album());
         viewModel.setLlista(Album.list_albums);
@@ -291,9 +306,15 @@ public class llista_cansons extends Fragment  {
             cardAvisEnabled();
 
             b.recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL,false));
-            adapter=new Song_Adapter(entrada.getConsons_Album(),this);
+            adapter=new Song_Adapter(ordenarListaPorPosicion(entrada.getConsons_Album()),this);
             b.recyclerView.setAdapter(adapter);
 
+    }
+
+
+    public static List<Song> ordenarListaPorPosicion(List<Song> lista) {
+        Collections.sort(lista, Comparator.comparingInt(Song::getPosicio));
+        return lista;
     }
 
 

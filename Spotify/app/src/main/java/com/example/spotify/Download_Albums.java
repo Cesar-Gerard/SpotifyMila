@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,70 +109,82 @@ public class Download_Albums extends Fragment {
             }
         });
 
+
+
     }
 
 
     private void ArtistSearch() {
-        showLoadingBeforeSearchArtist();
-        manager.getArtista(binding.EditTextCerca.getText().toString(), new Callback<SearchArtist>() {
-            @Override
-            public void onResponse(Call<SearchArtist> call, Response<SearchArtist> response) {
 
-                List<Artist> resultat = response.body().getResults().getArtistmatches().getArtist();
-
-                resultArtist=resultat;
-
-                viewModelArtist.getLlistaArtista().observe(getViewLifecycleOwner(), artists -> {
+        if(!binding.EditTextCerca.getText().toString().equals("")) {
 
 
+            showLoadingBeforeSearchArtist();
+            manager.getArtista(binding.EditTextCerca.getText().toString(), new Callback<SearchArtist>() {
+                @Override
+                public void onResponse(Call<SearchArtist> call, Response<SearchArtist> response) {
+
+                    if (response.body() != null) {
+                        List<Artist> resultat = response.body().getResults().getArtistmatches().getArtist();
+
+                        resultArtist = resultat;
+
+                        viewModelArtist.getLlistaArtista().observe(getViewLifecycleOwner(), artists -> {
+
+
+                            hideLoadingArtist();
+                            recycleArtists(resultArtist);
+
+
+                        });
+                    }
+
+
+                }
+
+                @Override
+                public void onFailure(Call<SearchArtist> call, Throwable t) {
                     hideLoadingArtist();
-                    recycleArtists(resultArtist);
-
-
-                });
-
-
-
-            }
-
-            @Override
-            public void onFailure(Call<SearchArtist> call, Throwable t) {
-                hideLoadingArtist();
-            }
-        });
+                }
+            });
+        }
     }
 
 
     private void AlbumSearch() {
+            if(!binding.EditTextCerca.getText().toString().equals("")){
 
-        showLoadingBeforeSearchAlbum();
-        manager.getAlbums(binding.EditTextCerca.getText().toString(), new Callback<SearchAlbum>() {
-            @Override
-            public void onResponse(Call<SearchAlbum> call, Response<SearchAlbum> response) {
+                showLoadingBeforeSearchAlbum();
+                manager.getAlbums(binding.EditTextCerca.getText().toString(), new Callback<SearchAlbum>() {
+                    @Override
+                    public void onResponse(Call<SearchAlbum> call, Response<SearchAlbum> response) {
 
-                List<Album> result = response.body().getResults().getAlbummatches().getAlbum();
+                        if(response.body()!=null) {
+                            List<Album> result = response.body().getResults().getAlbummatches().getAlbum();
 
-                if(result!=null && !result.isEmpty()){
-                    groupedAlbums= groupedAlbumsByArtists(result);
+                            if (result != null && !result.isEmpty()) {
+                                groupedAlbums = groupedAlbumsByArtists(result);
 
 
-                    viewModel.getLlistaAlbums().observe(getViewLifecycleOwner(),albums ->{
+                                viewModel.getLlistaAlbums().observe(getViewLifecycleOwner(), albums -> {
 
+                                    hideLoadingAlbum();
+                                    recycleAlbums(groupedAlbums);
+
+                                });
+
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<SearchAlbum> call, Throwable t) {
                         hideLoadingAlbum();
-                        recycleAlbums(groupedAlbums);
-
-                    });
-
-                }
-
+                    }
+                });
             }
-
-            @Override
-            public void onFailure(Call<SearchAlbum> call, Throwable t) {
-                hideLoadingAlbum();
-            }
-        });
-    }
+        }
 
     private Map<String, List<Album>> groupedAlbumsByArtists(List<Album> albums) {
         Map<String, List<Album>> groupedAlbums = new HashMap<>();

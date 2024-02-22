@@ -253,7 +253,7 @@ public class Image_Album_adapter extends RecyclerView.Adapter<Image_Album_adapte
                 notifyDataSetChanged();
                 hideLoading();
             }
-        }, 0);
+        }, 1);
     }
 
 

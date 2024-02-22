@@ -288,12 +288,12 @@ public class Album implements Serializable {
 
 
     //Retorna un nou id per la creació de una canço
-    public  int getNewSongId(){
+    public  int getNewSongPosition(){
         if(this.consons_Album.size()>0) {
 
-            Song last = this.consons_Album.get(consons_Album.size() - 1);
+            Song last = this.consons_Album.get(consons_Album.size()-1);
 
-            return (int) last.getId() + 1;
+            return (int) last.getPosicio() + 1;
         }else{
             return 0;
         }
